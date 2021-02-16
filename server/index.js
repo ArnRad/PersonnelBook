@@ -22,6 +22,10 @@ app.use('/api/employees', employees);
 const users = require('./routes/api/users');
 app.use('/api/users', users);
 
+// Import Workplaces
+const workplaces = require('./routes/api/workplaces');
+app.use('/api/workplaces', workplaces);
+
 // Connect to DB
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true }, () => {
     // console.log('Connected to DB!')

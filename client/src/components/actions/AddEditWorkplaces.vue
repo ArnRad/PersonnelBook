@@ -89,7 +89,7 @@ export default {
   },
 
   props: {
-    id: Number
+    id: String
   },
 
   created() {
@@ -117,7 +117,7 @@ export default {
           country: this.workplace.country
         })
         .then(response => {
-          this.$alert(response.data.message);
+          this.$alert('Darbovietė pridėta!');
         })
         .catch(error => {
           this.$alert(error);
@@ -126,14 +126,14 @@ export default {
 
     submitEdit() {
       axios
-        .put("http://" + this.globalURL + "/api/workplaces/" + this.id, {
+        .patch("http://" + this.globalURL + "/api/workplaces/" + this.id, {
           street: this.workplace.street,
           number: this.workplace.number,
           city: this.workplace.city,
           country: this.workplace.country
         })
         .then(response => {
-          this.$alert(response.data.message);
+          this.$alert("Darbovietė atnaujinta");
         })
         .catch(error => {
           this.$alert(error);

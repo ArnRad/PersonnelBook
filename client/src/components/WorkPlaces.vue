@@ -27,12 +27,12 @@
                 </td>
                 <td>
                   <img
-                    @click="toggleViewForm(workplace.id)"
+                    @click="toggleViewForm(workplace._id)"
                     src="../assets/edit-employee.png"
                   />
                   <img
                     class="delete-btn"
-                    @click="deleteGroup(workplace.id)"
+                    @click="deleteGroup(workplace._id)"
                     src="../assets/delete-employee.png"
                   />
                 </td>
@@ -70,7 +70,7 @@ export default {
 
     axios
       .get("http://" + this.globalURL + "/api/workplaces")
-      .then(response => (this.workPlaces = response.data.data));
+      .then(response => (this.workPlaces = response.data.workplaces));
   },
 
   methods: {
@@ -88,7 +88,7 @@ export default {
           }
         })
         .then(response => {
-          this.$alert(response.data.message);
+          this.$alert('Darbovietė pašalinta!');
         });
     },
 

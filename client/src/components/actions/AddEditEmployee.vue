@@ -234,7 +234,7 @@ export default {
 
     axios
       .get("http://" + this.globalURL + "/api/workplaces")
-      .then(response => (this.workplacesAll = response.data.data));
+      .then(response => (this.workplacesAll = response.data.workplaces));
 
     axios.get("http://" + this.globalURL + "/api/divisions").then(response => {
       this.divisionsAll = response.data;
