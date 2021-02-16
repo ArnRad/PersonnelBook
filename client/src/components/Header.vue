@@ -172,6 +172,7 @@ $desktopMid-width: 1750px;
 .header {
 background: rgb(186,44,39);
 background: linear-gradient(90deg, rgba(186,44,39,1) 0%, rgba(97,14,128,1) 100%);
+//background: $color1;
 
   width: 100%;
   height: 57px;

@@ -58,9 +58,9 @@
                   <input
                     type="checkbox"
                     name="structure-create"
-                    v-model="selectedStructures"
+                    v-model="selectedPermissions"
                     :value="'create-edit structures'"
-                    @change="editCheck(selectedStructures, 'structures')"
+                    @change="editCheck(selectedPermissions, 'structures')"
                   />
                   <label for="structure-create">Kurti, redaguoti</label>
                 </div>
@@ -68,7 +68,7 @@
                   <input
                     type="checkbox"
                     name="structure-delete"
-                    v-model="selectedStructures"
+                    v-model="selectedPermissions"
                     :value="'delete structures'"
                   />
                   <label for="structure-delete">Trinti</label>
@@ -77,7 +77,7 @@
                   <input
                     type="checkbox"
                     name="structure-read"
-                    v-model="selectedStructures"
+                    v-model="selectedPermissions"
                     :value="'read structures'"
                   />
                   <label for="structure-read">Skaityti</label>
@@ -90,9 +90,9 @@
                   <input
                     type="checkbox"
                     name="workplace-create"
-                    v-model="selectedWorkplaces"
+                    v-model="selectedPermissions"
                     :value="'create-edit workplaces'"
-                    @change="editCheck(selectedWorkplaces, 'workplaces')"
+                    @change="editCheck(selectedPermissions, 'workplaces')"
                   />
                   <label for="workplace-create">Kurti, redaguoti</label>
                 </div>
@@ -100,7 +100,7 @@
                   <input
                     type="checkbox"
                     name="workplace-delete"
-                    v-model="selectedWorkplaces"
+                    v-model="selectedPermissions"
                     :value="'delete workplaces'"
                   />
                   <label for="workplace-delete">Trinti</label>
@@ -109,7 +109,7 @@
                   <input
                     type="checkbox"
                     name="workplace-read"
-                    v-model="selectedWorkplaces"
+                    v-model="selectedPermissions"
                     :value="'read workplaces'"
                   />
                   <label for="workplace-read">Skaityti</label>
@@ -122,9 +122,9 @@
                   <input
                     type="checkbox"
                     name="employee-create"
-                    v-model="selectedUsers"
+                    v-model="selectedPermissions"
                     :value="'create-edit employees'"
-                    @change="editCheck(selectedUsers, 'employees')"
+                    @change="editCheck(selectedPermissions, 'employees')"
                   />
                   <label for="employee-create">Kurti, redaguoti</label>
                 </div>
@@ -132,7 +132,7 @@
                   <input
                     type="checkbox"
                     name="employee-delete"
-                    v-model="selectedUsers"
+                    v-model="selectedPermissions"
                     :value="'delete employees'"
                   />
                   <label for="employee-delete">Trinti</label>
@@ -141,7 +141,7 @@
                   <input
                     type="checkbox"
                     name="employee-read"
-                    v-model="selectedUsers"
+                    v-model="selectedPermissions"
                     :value="'read employees'"
                   />
                   <label for="employee-read">Skaityti</label>
@@ -183,14 +183,15 @@ export default {
     return {
       header: "Pridėti naują vartotoją",
       user: {},
-      selectedStructures: [],
-      selectedWorkplaces: [],
-      selectedUsers: []
+      selectedPermissions: []
+      // selectedStructures: [],
+      // selectedWorkplaces: [],
+      // selectedUsers: []
     };
   },
 
   props: {
-    id: Number
+    id: String
   },
 
   created() {
@@ -203,17 +204,9 @@ export default {
       axios
         .get("http://" + this.globalURL + "/api/users/" + this.id + "/edit")
         .then(response => {
-          this.user = response.data.User;
-          for (let i = 0; i < response.data.Permissions.length; i++) {
-            if (response.data.Permissions[i].name.includes("employees")) {
-              this.selectedUsers.push(response.data.Permissions[i].name);
-            }
-            if (response.data.Permissions[i].name.includes("workplaces")) {
-              this.selectedWorkplaces.push(response.data.Permissions[i].name);
-            }
-            if (response.data.Permissions[i].name.includes("structures")) {
-              this.selectedStructures.push(response.data.Permissions[i].name);
-            }
+          this.user = response.data;
+          for (let i = 0; i < response.data.permissions.length; i++) {
+            this.selectedPermissions.push(response.data.permissions[i]);
           }
         });
     }
@@ -227,12 +220,10 @@ export default {
           surname: this.user.surname,
           email: this.user.email,
           confirmed_email: this.user.confirmed_email,
-          workplaces: this.selectedWorkplaces,
-          employees: this.selectedUsers,
-          structures: this.selectedStructures
+          permissions: this.selectedPermissions
         })
         .then(response => {
-          this.$alert(response.data.message);
+          this.$alert('Vartotojas pridėtas!');
           this.$emit("update");
         })
         .catch(error => {
@@ -242,17 +233,15 @@ export default {
 
     submitEdit() {
       axios
-        .put("http://" + this.globalURL + "/api/users/" + this.id, {
+        .patch("http://" + this.globalURL + "/api/users/" + this.id, {
           name: this.user.name,
           surname: this.user.surname,
           email: this.user.email,
           confirmed_email: this.user.confirmed_email,
-          workplaces: this.selectedWorkplaces,
-          employees: this.selectedUsers,
-          structures: this.selectedStructures
+          permissions: this.selectedPermissions
         })
         .then(response => {
-          this.$alert(response.data.message);
+          this.$alert('Vartotojas atnaujintas');
           this.$emit("update");
         })
         .catch(error => {

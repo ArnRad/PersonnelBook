@@ -31,19 +31,13 @@ const userSchema = new mongoose.Schema({
         min: 6,
         max: 1024
     },
+    permissions: {
+        type: Array
+    },
     date: {
         type: Date,
         default: Date.now
     }
-    // employees: {
-
-    // },
-    // workplaces: {
-
-    // },
-    // structures: {
-
-    // }
 });
 
 module.exports = mongoose.model('User', userSchema);

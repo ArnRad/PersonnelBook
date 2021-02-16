@@ -28,21 +28,21 @@
                 <th></th>
               </tr>
             </thead>
-            <tbody v-for="user in Users" :key="user.id">
+            <tbody v-for="user in Users" :key="user._id">
               <tr>
                 <td>{{ user.name }}</td>
                 <td>{{ user.surname }}</td>
                 <td>{{ user.email }}</td>
-                <td>{{ user.username }}</td>
-                <td>{{ user.email_verified_at }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.date }}</td>
                 <td>
                   <img
-                    @click="toggleViewForm(user.id)"
+                    @click="toggleViewForm(user._id)"
                     src="../assets/edit-employee.png"
                   />
                   <img
                     class="delete-btn"
-                    @click="deleteGroup(user.id)"
+                    @click="deleteGroup(user._id)"
                     src="../assets/delete-employee.png"
                   />
                 </td>
@@ -85,7 +85,9 @@ export default {
 
       axios
         .get("http://" + this.globalURL + "/api/users")
-        .then(response => (this.Users = response.data.data));
+        .then(response => {
+          (this.Users = response.data.users)
+        });
     },
 
     deleteGroup(id) {
@@ -102,7 +104,7 @@ export default {
           }
         })
         .then(response => {
-          this.$alert(response.data.message);
+          this.$alert('Vartotojas ištrintas!');
           this.getUsers();
         });
     },
