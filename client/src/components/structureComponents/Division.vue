@@ -62,6 +62,7 @@ export default {
   data() {
     return {
       Divisions: {},
+      SubDivisions: [],
       id: 0,
       displayView: false
     };
@@ -85,25 +86,43 @@ export default {
         .then(response => {
           (this.Divisions = response.data.divisions)
         });
+
+      axios
+        .get("http://" + this.globalURL + "/api/subdivisions")
+        .then(
+          response => (
+            (this.SubDivisions = response.data.subdivision)
+          )
+        );
     },
 
     deleteDivision(id) {
+      let allowDelete = true;
+
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + localStorage.getItem("access_token");
 
-      axios
-        .delete("http://" + this.globalURL + "/api/divisions/" + id, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token")
-          },
-          data: {
-            username: localStorage.getItem("user_name")
-          }
-        })
-        .then(response => {
-          this.$alert('Padalinys ištrintas!');
-          this.getDivisions();
-        });
+      for (let i = 0; i < this.SubDivisions.length; i++) {
+        if (this.SubDivisions[i].division_id[0] === id) {allowDelete = false}
+      }
+      
+      if(allowDelete) {
+        axios
+          .delete("http://" + this.globalURL + "/api/divisions/" + id, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token")
+            },
+            data: {
+              username: localStorage.getItem("user_name")
+            }
+          })
+          .then(response => {
+            this.$alert('Padalinys ištrintas!');
+            this.getDivisions();
+          });
+      } else {
+        this.$alert('Pirma ištrinkite visus skyrius priklausančius šiam padaliniui!');
+      }
     },
 
     toggleViewForm(value) {

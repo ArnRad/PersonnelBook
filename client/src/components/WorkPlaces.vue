@@ -55,6 +55,7 @@ export default {
   data() {
     return {
       workPlaces: {},
+      Divisions: [],
       id: 0,
       displayView: false
     };
@@ -71,14 +72,27 @@ export default {
     axios
       .get("http://" + this.globalURL + "/api/workplaces")
       .then(response => (this.workPlaces = response.data.workplaces));
+
+    axios
+      .get("http://" + this.globalURL + "/api/divisions")
+      .then(response => {
+        (this.Divisions = response.data.divisions)
+      });
   },
 
   methods: {
     deleteGroup(id) {
+      let allowDelete = true;
+
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + localStorage.getItem("access_token");
 
-      axios
+      for (let i = 0; i < this.Divisions.length; i++) {
+        if (this.Divisions[i].workplace_id[0] === id) {allowDelete = false}
+      }
+
+      if(allowDelete) {
+        axios
         .delete("http://" + this.globalURL + "/api/workplaces/" + id, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("access_token")
@@ -90,6 +104,9 @@ export default {
         .then(response => {
           this.$alert('Darbovietė pašalinta!');
         });
+      } else {
+        this.$alert('Pirma ištrinkite visus padalinius priklausančius šiai darbovietei!');
+      }
     },
 
     toggleViewForm(value) {

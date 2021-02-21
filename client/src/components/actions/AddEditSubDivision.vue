@@ -33,7 +33,8 @@
                   />
                   <label for="division">
                       {{ divisionOne.name + ' ( '
-                      + divisionOne.workplaces.street + ', '
+                      + divisionOne.workplaces.street + ' '
+                      + divisionOne.workplaces.number + ', '
                       + divisionOne.workplaces.city + ', '
                       + divisionOne.workplaces.country + ' )' }}
                   </label>
@@ -192,7 +193,7 @@ export default {
           list-style: none;
           padding: 0;
           margin: 0;
-          width: 30%;
+          width: 50%;
         }
 
         li {

@@ -191,7 +191,7 @@ export default {
           list-style: none;
           padding: 0;
           margin: 0;
-          width: 30%;
+          width: 40%;
         }
 
         li {

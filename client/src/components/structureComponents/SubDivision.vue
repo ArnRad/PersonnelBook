@@ -21,13 +21,22 @@
             <tr>
               <th>Skyriaus pavadinimas</th>
               <th>Priskirtas padalinys</th>
+              <th>Padalinio adresas</th>
               <th></th>
             </tr>
           </thead>
           <tbody v-for="subdivision in SubDivisions" :key="subdivision.id">
             <tr>
               <td>{{ subdivision.name }}</td>
-              <td>{{ subdivision.division.name }}</td>
+              <td>{{ subdivision.division.name}}</td>
+              <td>
+                {{
+                subdivision.division.workplaces.street
+                + ' ' + subdivision.division.workplaces.number
+                + ', ' + subdivision.division.workplaces.city
+                + ', ' + subdivision.division.workplaces.country
+                }}
+              </td>
               <td>
                 <img
                   @click="toggleViewForm(subdivision._id)"
