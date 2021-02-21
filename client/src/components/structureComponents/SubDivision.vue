@@ -30,12 +30,12 @@
               <td>{{ subdivision.division.name }}</td>
               <td>
                 <img
-                  @click="toggleViewForm(subdivision.id)"
+                  @click="toggleViewForm(subdivision._id)"
                   src="../../assets/edit-employee.png"
                 />
                 <img
                   class="delete-btn"
-                  @click="deleteSubDivision(subdivision.id)"
+                  @click="deleteSubDivision(subdivision._id)"
                   src="../../assets/delete-employee.png"
                 />
               </td>
@@ -56,9 +56,7 @@ export default {
 
   data() {
     return {
-      selectedDivision: 0,
       SubDivisions: {},
-      workplacesAll: {},
       id: 0,
       displayView: false
     };
@@ -81,8 +79,7 @@ export default {
         .get("http://" + this.globalURL + "/api/subdivisions")
         .then(
           response => (
-            (this.SubDivisions = response.data.subdivision.data),
-            (this.selectedDivision = response.data.subdivision.division_id)
+            (this.SubDivisions = response.data.subdivision)
           )
         );
     },
@@ -101,7 +98,7 @@ export default {
           }
         })
         .then(response => {
-          this.$alert(response.data.message);
+          this.$alert('Skyrius ištrintas!');
           this.getSubdivisions();
         });
     },

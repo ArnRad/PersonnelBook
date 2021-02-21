@@ -19,36 +19,24 @@
                 />
               </li>
 
-              <li>
-                <label for="division">Pasirinkite padalinį</label>
-                <select
-                  name="division"
-                  v-model="selectedDivision"
-                  @change="changeWorkplaces(selectedDivision)"
-                >
-                  <template v-for="divisionOne in divisionsAll">
-                    <option :key="divisionOne.id" :value="divisionOne.id">
-                      {{ divisionOne.name }}
-                    </option>
-                  </template>
-                </select>
-              </li>
-              <li class="checkField">
-                <label>Pasirinkite darbovietę</label>
+              <li class="checkField" v-if="!this.id">
+                <label>Pasirinkite padalinį</label>
                 <div
-                  v-for="workplaceOne in workplacesAll"
-                  :key="workplaceOne.id"
+                  v-for="divisionOne in divisionsAll"
+                  :key="divisionOne._id"
                 >
                   <input
                     type="checkbox"
-                    name="workplace"
-                    v-model="selectedWorkplace"
-                    :value="workplaceOne.id"
+                    name="division"
+                    v-model="selectedDivision"
+                    :value="divisionOne"
                   />
-                  <label for="workplace">
-                    {{ workplaceOne.street }} {{ workplaceOne.number }},
-                    {{ workplaceOne.city }}, {{ workplaceOne.country }}</label
-                  >
+                  <label for="division">
+                      {{ divisionOne.name + ' ( '
+                      + divisionOne.workplaces.street + ', '
+                      + divisionOne.workplaces.city + ', '
+                      + divisionOne.workplaces.country + ' )' }}
+                  </label>
                 </div>
               </li>
 
@@ -62,7 +50,7 @@
                 <input
                   v-show="this.id"
                   type="submit"
-                  @click.prevent="submitEdit(subdivision.id)"
+                  @click.prevent="submitEdit(subdivision._id)"
                   value="Redaguoti"
                 />
                 <button @click="$emit('close')">Atšaukti</button>
@@ -84,16 +72,14 @@ export default {
   data() {
     return {
       header: "Pridėti naują skyrių",
-      selectedWorkplace: [],
-      selectedDivision: 3,
+      selectedDivision: [],
       subdivision: {},
       divisionsAll: {},
-      workplacesAll: {}
     };
   },
 
   props: {
-    id: Number
+    id: String
   },
 
   created() {
@@ -102,11 +88,7 @@ export default {
 
     axios
       .get("http://" + this.globalURL + "/api/divisions")
-      .then(response => (this.divisionsAll = response.data));
-
-    axios
-      .get("http://" + this.globalURL + "/api/workplaces")
-      .then(response => (this.workplacesAll = response.data.data));
+      .then(response => (this.divisionsAll = response.data.divisions));
 
     if (this.id) {
       this.header = "Redaguoti skyrių";
@@ -114,20 +96,7 @@ export default {
       axios
         .get("http://" + this.globalURL + "/api/subdivisions/" + this.id)
         .then(response => {
-          this.subdivision = response.data.subdivision;
-          this.selectedDivision = response.data.subdivision.division_id;
-          axios
-            .get(
-              "http://" +
-                this.globalURL +
-                "/api/divisions/" +
-                this.selectedDivision
-            )
-            .then(response => {
-              for (let i = 0; i < response.data.workplaces.length; i++) {
-                this.selectedWorkplace.push(response.data.workplaces[i].id);
-              }
-            });
+          this.subdivision = response.data;
         });
     }
   },
@@ -137,10 +106,10 @@ export default {
       axios
         .post("http://" + this.globalURL + "/api/subdivisions", {
           name: this.subdivision.name,
-          division_id: this.selectedDivision
+          division: this.selectedDivision
         })
         .then(response => {
-          this.$alert(response.data.message);
+          this.$alert('Skyrius sėkmingai pridėtas!');
           this.$emit("update");
         })
         .catch(error => {
@@ -150,29 +119,16 @@ export default {
 
     submitEdit(id) {
       axios
-        .put("http://" + this.globalURL + "/api/subdivisions/" + id, {
+        .patch("http://" + this.globalURL + "/api/subdivisions/" + id, {
           name: this.subdivision.name,
-          division_id: this.selectedDivision
         })
         .then(response => {
-          this.$alert(response.data.message);
+          this.$alert('Skyrius sėkmingai atnaujintas!');
           this.$emit("update");
         })
         .catch(error => {
           this.$alert(error);
         });
-    },
-
-    changeWorkplaces(id) {
-        axios
-          .get("http://" + this.globalURL + "/api/divisions")
-          .then(response => {
-            for (let i = 0; i < response.data.length; i++) {
-              if (response.data[i].id == id) {
-                this.workplacesAll = response.data[i].workplaces;
-              }
-            }
-          });
     }
   }
 };

@@ -19,7 +19,7 @@
                 />
               </li>
 
-              <li class="checkField">
+              <li class="checkField" v-if="!this.id">
                 <label>Pasirinkite darbovietes</label>
                 <div
                   v-for="workplaceOne in workplacesAll"
@@ -29,12 +29,11 @@
                     type="checkbox"
                     name="workplace"
                     v-model="selectedWorkplace"
-                    :value="workplaceOne.id"
+                    :value="workplaceOne._id"
                   />
                   <label for="workplace">
                     {{ workplaceOne.street }} {{ workplaceOne.number }},
-                    {{ workplaceOne.city }}, {{ workplaceOne.country }}
-                    {{ workplaceOne.id }}</label
+                    {{ workplaceOne.city }}, {{ workplaceOne.country }} </label
                   >
                 </div>
               </li>
@@ -49,7 +48,7 @@
                 <input
                   v-show="this.id"
                   type="submit"
-                  @click.prevent="submitEdit(division.id)"
+                  @click.prevent="submitEdit(division._id)"
                   value="Redaguoti"
                 />
                 <button @click="$emit('close')">Atšaukti</button>
@@ -78,7 +77,7 @@ export default {
   },
 
   props: {
-    id: Number
+    id: String
   },
 
   created() {
@@ -87,7 +86,7 @@ export default {
 
     axios
       .get("http://" + this.globalURL + "/api/workplaces")
-      .then(response => (this.workplacesAll = response.data.data));
+      .then(response => (this.workplacesAll = response.data.workplaces));
 
     if (this.id) {
       this.header = "Redaguoti padalinį";
@@ -96,9 +95,7 @@ export default {
         .get("http://" + this.globalURL + "/api/divisions/" + this.id)
         .then(response => {
           this.division = response.data;
-          for (let i = 0; i < response.data.workplaces.length; i++) {
-            this.selectedWorkplace.push(response.data.workplaces[i].id);
-          }
+          this.selectedWorkplace.push(response.data.workplaces._id)
         });
     }
   },
@@ -111,7 +108,7 @@ export default {
           workplace_id: this.selectedWorkplace
         })
         .then(response => {
-          this.$alert(response.data.message);
+          this.$alert('Padalinys sėkmingai pridėtas!');
           this.$emit("update");
         })
         .catch(error => {
@@ -121,12 +118,11 @@ export default {
 
     submitEdit(id) {
       axios
-        .put("http://" + this.globalURL + "/api/divisions/" + id, {
-          name: this.division.name,
-          workplace_id: this.selectedWorkplace
+        .patch("http://" + this.globalURL + "/api/divisions/" + id, {
+          name: this.division.name
         })
         .then(response => {
-          this.$alert(response.data.message);
+          this.$alert('Padalinys atnaujintas!');
           this.$emit("update");
         })
         .catch(error => {

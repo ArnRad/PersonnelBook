@@ -28,19 +28,19 @@
             <tr>
               <td>{{ division.name }}</td>
               <td>
-                {{ division.workplaces[0].street }}
-                {{ division.workplaces[0].number }},
-                {{ division.workplaces[0].city }},
-                {{ division.workplaces[0].country }}
+                {{ division.workplaces.street }}
+                {{ division.workplaces.number }},
+                {{ division.workplaces.city }},
+                {{ division.workplaces.country }}
               </td>
               <td>
                 <img
-                  @click="toggleViewForm(division.id)"
+                  @click="toggleViewForm(division._id)"
                   src="../../assets/edit-employee.png"
                 />
                 <img
                   class="delete-btn"
-                  @click="deleteDivision(division.id)"
+                  @click="deleteDivision(division._id)"
                   src="../../assets/delete-employee.png"
                 />
               </td>
@@ -82,7 +82,9 @@ export default {
 
       axios
         .get("http://" + this.globalURL + "/api/divisions")
-        .then(response => (this.Divisions = response.data));
+        .then(response => {
+          (this.Divisions = response.data.divisions)
+        });
     },
 
     deleteDivision(id) {
@@ -99,7 +101,7 @@ export default {
           }
         })
         .then(response => {
-          this.$alert(response.data.message);
+          this.$alert('Padalinys ištrintas!');
           this.getDivisions();
         });
     },

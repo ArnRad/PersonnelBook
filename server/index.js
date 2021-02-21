@@ -26,6 +26,14 @@ app.use('/api/users', users);
 const workplaces = require('./routes/api/workplaces');
 app.use('/api/workplaces', workplaces);
 
+// Import Divisions
+const divisions = require('./routes/api/divisions');
+app.use('/api/divisions', divisions);
+
+// Import Subdivisions
+const subdivisions = require('./routes/api/subdivisions');
+app.use('/api/subdivisions', subdivisions);
+
 // Connect to DB
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true }, () => {
     // console.log('Connected to DB!')
