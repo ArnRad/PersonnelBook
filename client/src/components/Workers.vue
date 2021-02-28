@@ -95,7 +95,8 @@ export default {
       .then(
         response => (
           (this.Worker = response.data.employees),
-          (this.pageCount = response.data.last_page)
+          (this.pageCount = response.data.last_page),
+          console.log(response)
         )
       );
   },

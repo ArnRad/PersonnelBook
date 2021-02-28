@@ -38,9 +38,9 @@
             <select name="subdivision" v-model="selectedSubDivision" required>
               <template v-for="subdivisionOne in subdivisionsAll">
                 <option
-                  v-if="subdivisionOne.division_id[0] == selectedDivision"
+                  v-if="subdivisionOne.division_id[0] == selectedDivision._id"
                   :key="subdivisionOne._id"
-                  :value="subdivisionOne._id"
+                  :value="subdivisionOne"
                 >
                   {{ subdivisionOne.name }}
                 </option>
@@ -53,8 +53,8 @@
               <template v-for="subgroupOne in subgroupsAll">
                 <option
                   :key="subgroupOne._id"
-                  v-if="subgroupOne.group_id == selectedGroup"
-                  :value="subgroupOne._id"
+                  v-if="subgroupOne.group_id == selectedGroup._id"
+                  :value="subgroupOne"
                 >
                   {{ subgroupOne.name }}
                 </option>
@@ -79,7 +79,7 @@
             <input
               type="email"
               name="email"
-              maxlength="20"
+              maxlength="30"
               v-model="employee.email"
             />
           </li>
@@ -90,7 +90,7 @@
               <option
                 v-for="workplaceOne in workplacesAll"
                 :key="workplaceOne._id"
-                :value="workplaceOne._id"
+                :value="workplaceOne"
               >
                 {{ workplaceOne.street }}
               </option>
@@ -102,8 +102,8 @@
               <template v-for="regionOne in regionsAll">
                 <option
                   :key="regionOne._id"
-                  v-if="regionOne.subdivision_id == selectedSubDivision"
-                  :value="regionOne._id"
+                  v-if="regionOne.subdivision_id == selectedSubDivision._id"
+                  :value="regionOne"
                 >
                   {{ regionOne.name }}
                 </option>
@@ -134,26 +134,22 @@
               <template v-for="divisionOne in divisionsAll">
                 <option
                   :key="divisionOne._id"
-                  :value="divisionOne._id"
-                  v-if="divisionOne.workplace_id[0] == selectedWorkplace"
+                  :value="divisionOne"
+                  v-if="divisionOne.workplace_id[0] == selectedWorkplace._id"
                 >
                   {{ divisionOne.name }}
                 </option>
               </template>
             </select>
           </li>
-
           <li>
             <label for="group">Grupė</label>
             <select name="group" v-model="selectedGroup" required>
               <template v-for="groupOne in groupsAll">
                 <option
                   :key="groupOne._id"
-                  v-if="
-                    groupOne.subdivision_id == selectedSubDivision ||
-                      groupOne.region_id == selectedRegion
-                  "
-                  :value="groupOne._id"
+                  v-if="groupOne.region_id == selectedRegion._id"
+                  :value="groupOne"
                 >
                   {{ groupOne.name }}
                 </option>
@@ -209,12 +205,12 @@ export default {
       groupsAll: {},
       subgroupsAll: {},
 
-      selectedWorkplace: 1,
-      selectedDivision: 0,
-      selectedSubDivision: 0,
-      selectedRegion: 0,
-      selectedGroup: 0,
-      selectedSubGroup: 0,
+      selectedWorkplace: [],
+      selectedDivision: [],
+      selectedSubDivision: [],
+      selectedRegion: [],
+      selectedGroup: [],
+      selectedSubGroup: [],
       header: "Pridėti naują darbuotoją",
       employee: {},
       workplace: {},
@@ -248,15 +244,15 @@ export default {
 
     axios
       .get("http://" + this.globalURL + "/api/regions")
-      .then(response => (this.regionsAll = response.data.regions.data));
+      .then(response => (this.regionsAll = response.data.region));
 
     axios
       .get("http://" + this.globalURL + "/api/groups")
-      .then(response => (this.groupsAll = response.data.groups));
+      .then(response => (this.groupsAll = response.data.group));
 
     axios
       .get("http://" + this.globalURL + "/api/subgroups")
-      .then(response => (this.subgroupsAll = response.data.data));
+      .then(response => (this.subgroupsAll = response.data.subgroup));
 
     if (this.$route.params.id) {
       this.header = "Redaguoti darbuotoją";
@@ -289,52 +285,28 @@ export default {
 
   methods: {
     submitAdd() {
-      if (this.selectedRegion != 0) {
-        axios
-          .post("http://" + this.globalURL + "/api/employees", {
-            name: this.employee.name,
-            lastname: this.employee.lastname,
-            mobile_number: this.employee.mobile_number,
-            work_number: this.employee.work_number,
-            email: this.employee.email,
-            gender: this.employee.gender,
-            position: this.employee.position,
-            workplace_id: this.selectedWorkplace,
-            division_id: this.selectedDivision,
-            subdivision_id: this.selectedSubDivision,
-            region_id: this.selectedRegion,
-            group_id: this.selectedGroup,
-            subgroup_id: this.selectedSubGroup
-          })
-          .then(response => {
-            this.$alert(response.data.message);
-          })
-          .catch(error => {
-            this.$alert(error);
-          });
-      } else {
-        axios
-          .post("http://" + this.globalURL + "/api/employees", {
-            name: this.employee.name,
-            lastname: this.employee.lastname,
-            mobile_number: this.employee.mobile_number,
-            work_number: this.employee.work_number,
-            email: this.employee.email,
-            gender: this.employee.gender,
-            position: this.employee.position,
-            workplace_id: this.selectedWorkplace,
-            division_id: this.selectedDivision,
-            subdivision_id: this.selectedSubDivision,
-            group_id: this.selectedGroup,
-            subgroup_id: this.selectedSubGroup
-          })
-          .then(response => {
-            this.$alert(response.data.message);
-          })
-          .catch(error => {
-            this.$alert(error);
-          });
-      }
+      axios
+        .post("http://" + this.globalURL + "/api/employees", {
+          name: this.employee.name,
+          lastname: this.employee.lastname,
+          mobile_number: this.employee.mobile_number,
+          work_number: this.employee.work_number,
+          email: this.employee.email,
+          gender: this.employee.gender,
+          position: this.employee.position,
+          workplace: this.selectedWorkplace,
+          division: this.selectedDivision,
+          subdivision: this.selectedSubDivision,
+          region: this.selectedRegion,
+          group: this.selectedGroup,
+          subgroup: this.selectedSubGroup
+        })
+        .then(response => {
+          this.$alert('Darbuotojas sėkmingai pridėtas!');
+        })
+        .catch(error => {
+          this.$alert(error);
+        });
     },
 
     submitEdit() {},

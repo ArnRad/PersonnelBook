@@ -22,13 +22,13 @@
       <router-link
         :to="{
           name: 'edit',
-          params: { id: worker.id }
+          params: { id: worker._id }
         }"
       >
         <img src="../../assets/edit-employee.png" />
       </router-link>
       <img
-        @click="$emit('delete', worker.id)"
+        @click="$emit('delete', worker._id)"
         src="../../assets/delete-employee.png"
       />
     </td>

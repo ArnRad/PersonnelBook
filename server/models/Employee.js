@@ -34,34 +34,34 @@ const EmployeeSchema = mongoose.Schema(
             type: String,
             required: true
         },
-        workplace_id: {
-            type: Number,
+        workplace: {
+            type: Object,
             required: true
         },
-        subdivision_id: {
-            type: Number,
+        subdivision: {
+            type: Object,
             required: true
         },
-        division_id: {
-            type: Number,
+        division: {
+            type: Object,
             required: true
         },
-        region_id: {
-            type: Number,
+        region: {
+            type: Object,
             required: false
         },
-        group_id: {
-            type: Number,
+        group: {
+            type: Object,
             required: true
         },
-        subgroup_id: {
-            type: Number,
+        subgroup: {
+            type: Object,
             required: true
         }
+    },
+    {
+        timestamps: true 
     }
-    // {
-    //     timestamps: true 
-    // }
 )
 
 module.exports = mongoose.model('Employees', EmployeeSchema);
