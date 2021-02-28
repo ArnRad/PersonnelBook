@@ -66,6 +66,7 @@ export default {
   data() {
     return {
       SubDivisions: {},
+      Regions: [],
       id: 0,
       displayView: false
     };
@@ -91,25 +92,39 @@ export default {
             (this.SubDivisions = response.data.subdivision)
           )
         );
+
+      axios
+        .get("http://" + this.globalURL + "/api/regions")
+        .then(response => (this.Regions = response.data.region));
     },
 
     deleteSubDivision(id) {
+      let allowDelete = true;
+
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + localStorage.getItem("access_token");
 
-      axios
-        .delete("http://" + this.globalURL + "/api/subdivisions/" + id, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token")
-          },
-          data: {
-            username: localStorage.getItem("user_name")
-          }
-        })
-        .then(response => {
-          this.$alert('Skyrius ištrintas!');
-          this.getSubdivisions();
-        });
+      for (let i = 0; i < this.Regions.length; i++) {
+        if (this.Regions[i].subdivision_id[0] === id) {allowDelete = false}
+      }
+
+      if(allowDelete) {
+        axios
+          .delete("http://" + this.globalURL + "/api/subdivisions/" + id, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token")
+            },
+            data: {
+              username: localStorage.getItem("user_name")
+            }
+          })
+          .then(response => {
+            this.$alert('Skyrius ištrintas!');
+            this.getSubdivisions();
+          });
+      } else {
+        this.$alert('Pirma ištrinkite visus regionus priklausančius šiam skyriui!');
+      }
     },
 
     toggleViewForm(value) {

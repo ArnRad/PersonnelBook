@@ -57,6 +57,7 @@ export default {
   data() {
     return {
       Regions: {},
+      Groups: [],
       id: 0,
       displayView: false
     };
@@ -78,25 +79,40 @@ export default {
       axios
         .get("http://" + this.globalURL + "/api/regions")
         .then(response => (this.Regions = response.data.region));
+
+      axios
+        .get("http://" + this.globalURL + "/api/groups")
+        .then(response => (this.Groups = response.data.group));
     },
 
     deleteRegion(id) {
+      let allowDelete = true;
+
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + localStorage.getItem("access_token");
 
-      axios
-        .delete("http://" + this.globalURL + "/api/regions/" + id, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token")
-          },
-          data: {
-            username: localStorage.getItem("user_name")
-          }
-        })
-        .then(response => {
-          this.$alert('Regionas ištrintas');
-          this.getRegions();
-        });
+      for (let i = 0; i < this.Groups.length; i++) {
+        if (this.Groups[i].region_id[0] === id) {allowDelete = false}
+      }
+
+      if(allowDelete) {
+        axios
+          .delete("http://" + this.globalURL + "/api/regions/" + id, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token")
+            },
+            data: {
+              username: localStorage.getItem("user_name")
+            }
+          })
+          .then(response => {
+            this.$alert('Regionas ištrintas');
+            this.getRegions();
+          });
+      } else {
+        this.$alert('Pirma ištrinkite visas grupes priklausančias šiam regionui!');
+      }
+      
     },
 
     toggleViewForm(value) {

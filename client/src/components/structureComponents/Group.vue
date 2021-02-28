@@ -57,6 +57,7 @@ export default {
   data() {
     return {
       Groups: {},
+      subGroups: [],
       id: 0,
       displayView: false
     };
@@ -78,25 +79,39 @@ export default {
       axios
         .get("http://" + this.globalURL + "/api/groups")
         .then(response => (this.Groups = response.data.group));
+
+      axios
+        .get("http://" + this.globalURL + "/api/subgroups")
+        .then(response => (this.subGroups = response.data.subgroup));
     },
 
     deleteGroup(id) {
+      let allowDelete = true;
+      
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + localStorage.getItem("access_token");
 
+      for (let i = 0; i < this.subGroups.length; i++) {
+        if (this.subGroups[i].group_id[0] === id) {allowDelete = false}
+      }
+
+    if(allowDelete) {
       axios
         .delete("http://" + this.globalURL + "/api/groups/" + id, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token")
-          },
-          data: {
-            username: localStorage.getItem("user_name")
-          }
-        })
-        .then(response => {
-          this.$alert('Grupė ištrintas');
-          this.getGroups();
-        });
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token")
+            },
+            data: {
+              username: localStorage.getItem("user_name")
+            }
+          })
+          .then(response => {
+            this.$alert('Grupė ištrintas');
+            this.getGroups();
+          });
+      } else {
+          this.$alert('Pirma ištrinkite visus pogrupius priklausančius šiai grupei!');
+      }
     },
 
     toggleViewForm(value) {
