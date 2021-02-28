@@ -18,18 +18,24 @@
                   required
                 />
               </li>
-
-              <li>
-                <label for="group">Pasirinkite grupę</label>
-                <select name="group" v-model="selectedGroup">
-                  <template v-for="groupOne in groupsAll">
-                    <option :key="groupOne.id" :value="groupOne.id">
-                      {{ groupOne.name }}
-                    </option>
-                  </template>
-                </select>
+              <li class="checkField" v-if="!this.id">
+                <label>Pasirinkite grupę</label>
+                <div
+                  v-for="groupOne in groupsAll"
+                  :key="groupOne._id"
+                >
+                  <input
+                    type="checkbox"
+                    name="group"
+                    v-model="selectedGroup"
+                    :value="groupOne"
+                  />
+                  <label for="group">
+                      {{ groupOne.name + ' ( '
+                      + groupOne.region.name + ' )'}}
+                  </label>
+                </div>
               </li>
-
               <li class="buttons">
                 <input
                   v-show="!this.id"
@@ -40,7 +46,7 @@
                 <input
                   v-show="this.id"
                   type="submit"
-                  @click.prevent="submitEdit(subgroup.id)"
+                  @click.prevent="submitEdit(subgroup._id)"
                   value="Redaguoti"
                 />
                 <button @click="$emit('close')">Atšaukti</button>
@@ -64,12 +70,12 @@ export default {
       header: "Pridėti naują pogrupį",
       subgroup: {},
       groupsAll: {},
-      selectedGroup: 0
+      selectedGroup: []
     };
   },
 
   props: {
-    id: Number
+    id: String
   },
 
   created() {
@@ -78,7 +84,7 @@ export default {
 
     axios
       .get("http://" + this.globalURL + "/api/groups")
-      .then(response => (this.groupsAll = response.data.groups));
+      .then(response => (this.groupsAll = response.data.group));
 
     if (this.id) {
       this.header = "Redaguoti pogrupį";
@@ -97,10 +103,10 @@ export default {
       axios
         .post("http://" + this.globalURL + "/api/subgroups", {
           name: this.subgroup.name,
-          group_id: this.selectedGroup
+          group: this.selectedGroup
         })
         .then(response => {
-          this.$alert(response.data.message);
+          this.$alert('Pogrupis pridėtas!');
           this.$emit("update");
         })
         .catch(error => {
@@ -110,12 +116,11 @@ export default {
 
     submitEdit(id) {
       axios
-        .put("http://" + this.globalURL + "/api/subgroups/" + id, {
-          name: this.subgroup.name,
-          group_id: this.selectedGroup
+        .patch("http://" + this.globalURL + "/api/subgroups/" + id, {
+          name: this.subgroup.name
         })
         .then(response => {
-          this.$alert(response.data.message);
+          this.$alert('Pogrupis atnaujintas!');
           this.$emit("update");
         })
         .catch(error => {

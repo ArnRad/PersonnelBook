@@ -34,6 +34,18 @@ app.use('/api/divisions', divisions);
 const subdivisions = require('./routes/api/subdivisions');
 app.use('/api/subdivisions', subdivisions);
 
+// Import Regions
+const regions = require('./routes/api/regions');
+app.use('/api/regions', regions);
+
+// Import Groups
+const groups = require('./routes/api/groups');
+app.use('/api/groups', groups);
+
+// Import Subgroups
+const subgroups = require('./routes/api/subgroups');
+app.use('/api/subgroups', subgroups);
+
 // Connect to DB
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true }, () => {
     // console.log('Connected to DB!')

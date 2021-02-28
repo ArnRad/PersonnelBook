@@ -24,18 +24,18 @@
               <th></th>
             </tr>
           </thead>
-          <tbody v-for="region in Regions" :key="region.id">
+          <tbody v-for="region in Regions" :key="region._id">
             <tr>
               <td>{{ region.name }}</td>
               <td>{{ region.subdivision.name }}</td>
               <td>
                 <img
-                  @click="toggleViewForm(region.id)"
+                  @click="toggleViewForm(region._id)"
                   src="../../assets/edit-employee.png"
                 />
                 <img
                   class="delete-btn"
-                  @click="deleteRegion(region.id)"
+                  @click="deleteRegion(region._id)"
                   src="../../assets/delete-employee.png"
                 />
               </td>
@@ -77,7 +77,7 @@ export default {
 
       axios
         .get("http://" + this.globalURL + "/api/regions")
-        .then(response => (this.Regions = response.data.regions.data));
+        .then(response => (this.Regions = response.data.region));
     },
 
     deleteRegion(id) {
@@ -94,7 +94,7 @@ export default {
           }
         })
         .then(response => {
-          this.$alert(response.data.message);
+          this.$alert('Regionas ištrintas');
           this.getRegions();
         });
     },

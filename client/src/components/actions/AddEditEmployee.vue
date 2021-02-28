@@ -38,9 +38,9 @@
             <select name="subdivision" v-model="selectedSubDivision" required>
               <template v-for="subdivisionOne in subdivisionsAll">
                 <option
-                  v-if="subdivisionOne.division_id == selectedDivision"
-                  :key="subdivisionOne.id"
-                  :value="subdivisionOne.id"
+                  v-if="subdivisionOne.division_id[0] == selectedDivision"
+                  :key="subdivisionOne._id"
+                  :value="subdivisionOne._id"
                 >
                   {{ subdivisionOne.name }}
                 </option>
@@ -52,9 +52,9 @@
             <select name="subgroup" v-model="selectedSubGroup" required>
               <template v-for="subgroupOne in subgroupsAll">
                 <option
-                  :key="subgroupOne.id"
+                  :key="subgroupOne._id"
                   v-if="subgroupOne.group_id == selectedGroup"
-                  :value="subgroupOne.id"
+                  :value="subgroupOne._id"
                 >
                   {{ subgroupOne.name }}
                 </option>
@@ -89,8 +89,8 @@
             <select name="workplace" v-model="selectedWorkplace" required>
               <option
                 v-for="workplaceOne in workplacesAll"
-                :key="workplaceOne.id"
-                :value="workplaceOne.id"
+                :key="workplaceOne._id"
+                :value="workplaceOne._id"
               >
                 {{ workplaceOne.street }}
               </option>
@@ -101,9 +101,9 @@
             <select name="region" v-model="selectedRegion">
               <template v-for="regionOne in regionsAll">
                 <option
-                  :key="regionOne.id"
+                  :key="regionOne._id"
                   v-if="regionOne.subdivision_id == selectedSubDivision"
-                  :value="regionOne.id"
+                  :value="regionOne._id"
                 >
                   {{ regionOne.name }}
                 </option>
@@ -131,13 +131,13 @@
           <li>
             <label for="division">Padalinys</label>
             <select name="division" v-model="selectedDivision" required>
-              <template v-for="divisionOne in testDivisionsAll">
+              <template v-for="divisionOne in divisionsAll">
                 <option
-                  :key="divisionOne.data.id"
-                  :value="divisionOne.data.id"
-                  v-if="divisionOne.dataWorkplace_id == selectedWorkplace"
+                  :key="divisionOne._id"
+                  :value="divisionOne._id"
+                  v-if="divisionOne.workplace_id[0] == selectedWorkplace"
                 >
-                  {{ divisionOne.data.name }}
+                  {{ divisionOne.name }}
                 </option>
               </template>
             </select>
@@ -148,12 +148,12 @@
             <select name="group" v-model="selectedGroup" required>
               <template v-for="groupOne in groupsAll">
                 <option
-                  :key="groupOne.id"
+                  :key="groupOne._id"
                   v-if="
                     groupOne.subdivision_id == selectedSubDivision ||
                       groupOne.region_id == selectedRegion
                   "
-                  :value="groupOne.id"
+                  :value="groupOne._id"
                 >
                   {{ groupOne.name }}
                 </option>
@@ -237,23 +237,13 @@ export default {
       .then(response => (this.workplacesAll = response.data.workplaces));
 
     axios.get("http://" + this.globalURL + "/api/divisions").then(response => {
-      this.divisionsAll = response.data;
-      for (let i = 0; i < this.divisionsAll.length; i++) {
-        for (let j = 0; j < response.data[i].workplaces.length; j++) {
-          let newObject = {
-            data: response.data[i],
-            dataWorkplace_id: response.data[i].workplaces[j].pivot.workplace_id
-          };
-
-          this.testDivisionsAll.push(newObject);
-        }
-      }
+      this.divisionsAll = response.data.divisions;
     });
 
     axios
       .get("http://" + this.globalURL + "/api/subdivisions")
       .then(
-        response => (this.subdivisionsAll = response.data.subdivision.data)
+        response => (this.subdivisionsAll = response.data.subdivision)
       );
 
     axios

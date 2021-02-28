@@ -31,12 +31,12 @@
               <td v-else>-</td>
               <td>
                 <img
-                  @click="toggleViewForm(subgroup.id)"
+                  @click="toggleViewForm(subgroup._id)"
                   src="../../assets/edit-employee.png"
                 />
                 <img
                   class="delete-btn"
-                  @click="deleteGroup(subgroup.id)"
+                  @click="deleteGroup(subgroup._id)"
                   src="../../assets/delete-employee.png"
                 />
               </td>
@@ -78,7 +78,7 @@ export default {
 
       axios
         .get("http://" + this.globalURL + "/api/subgroups")
-        .then(response => (this.subGroups = response.data.data));
+        .then(response => (this.subGroups = response.data.subgroup));
     },
 
     deleteGroup(id) {
@@ -95,7 +95,7 @@ export default {
           }
         })
         .then(response => {
-          this.$alert(response.data.message);
+          this.$alert('Pogrupis ištrintas!');
           this.getGroups();
         });
     },

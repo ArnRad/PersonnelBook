@@ -20,26 +20,22 @@
           <thead>
             <tr>
               <th>Grupės pavadinimas</th>
-              <th>Priskirtas skyrius</th>
               <th>Priskirtas regionas</th>
               <th></th>
             </tr>
           </thead>
-          <tbody v-for="group in Groups" :key="group.id">
+          <tbody v-for="group in Groups" :key="group._id">
             <tr>
               <td>{{ group.name }}</td>
-              <td v-if="group.subdivision">{{ group.subdivision.name }}</td>
-              <td v-else>-</td>
-              <td v-if="group.region">{{ group.region.name }}</td>
-              <td v-else>-</td>
+              <td>{{ group.region.name }}</td>
               <td>
                 <img
-                  @click="toggleViewForm(group.id)"
+                  @click="toggleViewForm(group._id)"
                   src="../../assets/edit-employee.png"
                 />
                 <img
                   class="delete-btn"
-                  @click="deleteGroup(group.id)"
+                  @click="deleteGroup(group._id)"
                   src="../../assets/delete-employee.png"
                 />
               </td>
@@ -81,7 +77,7 @@ export default {
 
       axios
         .get("http://" + this.globalURL + "/api/groups")
-        .then(response => (this.Groups = response.data.groups));
+        .then(response => (this.Groups = response.data.group));
     },
 
     deleteGroup(id) {
@@ -98,7 +94,7 @@ export default {
           }
         })
         .then(response => {
-          this.$alert(response.data.message);
+          this.$alert('Grupė ištrintas');
           this.getGroups();
         });
     },

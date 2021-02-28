@@ -2,7 +2,6 @@
   <div id="myModal" class="modal">
     <div class="modal-content">
       <span class="close" @click="$emit('close')">&times;</span>
-
       <div class="form-container">
         <form class="form">
           <div class="header-region">{{ header }}</div>
@@ -18,18 +17,24 @@
                   required
                 />
               </li>
-
-              <li>
-                <label for="subdivision">Pasirinkite skyrių</label>
-                <select name="subdivision" v-model="selectedSubDivision">
-                  <template v-for="subdivisionOne in subdivisionsAll">
-                    <option :key="subdivisionOne.id" :value="subdivisionOne.id">
-                      {{ subdivisionOne.name }}
-                    </option>
-                  </template>
-                </select>
+              <li class="checkField" v-if="!this.id">
+                <label>Pasirinkite skyrių</label>
+                <div
+                  v-for="subdivisionOne in subdivisionsAll"
+                  :key="subdivisionOne._id"
+                >
+                  <input
+                    type="checkbox"
+                    name="region"
+                    v-model="selectedSubDivision"
+                    :value="subdivisionOne"
+                  />
+                  <label for="region">
+                      {{ subdivisionOne.name + ' ( '
+                      + subdivisionOne.division.name + ' )'}}
+                  </label>
+                </div>
               </li>
-
               <li class="buttons">
                 <input
                   v-show="!this.id"
@@ -40,7 +45,7 @@
                 <input
                   v-show="this.id"
                   type="submit"
-                  @click.prevent="submitEdit(region.id)"
+                  @click.prevent="submitEdit(region._id)"
                   value="Redaguoti"
                 />
                 <button @click="$emit('close')">Atšaukti</button>
@@ -61,7 +66,7 @@ export default {
 
   data() {
     return {
-      selectedSubDivision: 0,
+      selectedSubDivision: [],
       subdivisionsAll: {},
       header: "Pridėti naują regioną",
       region: {},
@@ -70,7 +75,7 @@ export default {
   },
 
   props: {
-    id: Number
+    id: String
   },
 
   created() {
@@ -80,7 +85,7 @@ export default {
     axios
       .get("http://" + this.globalURL + "/api/subdivisions")
       .then(
-        response => (this.subdivisionsAll = response.data.subdivision.data)
+        response => (this.subdivisionsAll = response.data.subdivision)
       );
 
     if (this.id) {
@@ -89,8 +94,7 @@ export default {
       axios
         .get("http://" + this.globalURL + "/api/regions/" + this.id)
         .then(response => {
-          this.region = response.data.regions;
-          this.selectedSubDivision = response.data.regions.subdivision_id;
+          this.region = response.data;
         });
     }
   },
@@ -100,10 +104,10 @@ export default {
       axios
         .post("http://" + this.globalURL + "/api/regions", {
           name: this.region.name,
-          subdivision_id: this.selectedSubDivision
+          subdivision: this.selectedSubDivision
         })
         .then(response => {
-          this.$alert(response.data.message);
+          this.$alert('Regionas sėkmingai pridėtas!');
           this.$emit("update");
         })
         .catch(error => {
@@ -113,12 +117,11 @@ export default {
 
     submitEdit(id) {
       axios
-        .put("http://" + this.globalURL + "/api/regions/" + id, {
-          name: this.region.name,
-          subdivision_id: this.selectedSubDivision
+        .patch("http://" + this.globalURL + "/api/regions/" + id, {
+          name: this.region.name
         })
         .then(response => {
-          this.$alert(response.data.message);
+          this.$alert('Regionas sėkmingai atnaujintas!');
           this.$emit("update");
         })
         .catch(error => {

@@ -18,45 +18,24 @@
                   required
                 />
               </li>
-
-              <div class="subdivision-container">
-                <li>
-                  <label for="subdivision">Pasirinkite skyrių</label>
-                  <select name="subdivision" v-model="selectedSubDivision">
-                    <template v-for="subdivisionOne in subdivisionsAll">
-                      <option
-                        :key="subdivisionOne.id"
-                        :value="subdivisionOne.id"
-                      >
-                        {{ subdivisionOne.name }}
-                      </option>
-                    </template>
-                  </select>
-                </li>
-                <button
-                  @click="selectedSubDivision = null"
-                  class="removeButton"
+              <li class="checkField" v-if="!this.id">
+                <label>Pasirinkite regioną</label>
+                <div
+                  v-for="regionOne in regionAll"
+                  :key="regionOne._id"
                 >
-                  Ištrinti
-                </button>
-              </div>
-
-              <div class="region-container">
-                <li>
-                  <label for="region">Pasirinkite regioną</label>
-                  <select name="region" v-model="selectedRegion">
-                    <template v-for="regionOne in regionAll">
-                      <option :key="regionOne.id" :value="regionOne.id">
-                        {{ regionOne.name }}
-                      </option>
-                    </template>
-                  </select>
-                </li>
-                <button @click="selectedRegion = null" class="removeButton">
-                  Ištrinti
-                </button>
-              </div>
-
+                  <input
+                    type="checkbox"
+                    name="group"
+                    v-model="selectedRegion"
+                    :value="regionOne"
+                  />
+                  <label for="group">
+                      {{ regionOne.name + ' ( '
+                      + regionOne.subdivision.name + ' )'}}
+                  </label>
+                </div>
+              </li>
               <li class="buttons">
                 <input
                   v-show="!this.id"
@@ -90,15 +69,13 @@ export default {
     return {
       header: "Pridėti naują grupę",
       group: {},
-      subdivisionsAll: {},
-      selectedSubDivision: null,
       regionAll: {},
-      selectedRegion: null
+      selectedRegion: []
     };
   },
 
   props: {
-    id: Number
+    id: String
   },
 
   created() {
@@ -106,14 +83,8 @@ export default {
       "Bearer " + localStorage.getItem("access_token");
 
     axios
-      .get("http://" + this.globalURL + "/api/subdivisions")
-      .then(
-        response => (this.subdivisionsAll = response.data.subdivision.data)
-      );
-
-    axios
       .get("http://" + this.globalURL + "/api/regions")
-      .then(response => (this.regionAll = response.data.regions.data));
+      .then(response => (this.regionAll = response.data.region));
 
     if (this.id) {
       this.header = "Redaguoti grupę";
@@ -121,81 +92,39 @@ export default {
       axios
         .get("http://" + this.globalURL + "/api/groups/" + this.id)
         .then(response => {
-          this.group = response.data.group;
-          this.selectedSubDivision = response.data.group.subdivision_id;
-          this.selectedRegion = response.data.group.region_id;
+          this.group = response.data;
         });
     }
   },
 
   methods: {
     submitAdd() {
-      if (this.selectedRegion != null && this.selectedSubDivision != null) {
-        alert("Pasirinkite tik vieną! Regioną arba grupę");
-      } else if (this.selectedRegion != null) {
-        axios
-          .post("http://" + this.globalURL + "/api/groups", {
-            name: this.group.name,
-            region_id: this.selectedRegion
-          })
-          .then(response => {
-            this.$alert(response.data.message);
-            this.$emit("update");
-          })
-          .catch(error => {
-            this.$alert(error);
-          });
-      } else if (this.selectedSubDivision != null) {
-        axios
-          .post("http://" + this.globalURL + "/api/groups", {
-            name: this.group.name,
-            subdivision_id: this.selectedSubDivision
-          })
-          .then(response => {
-            this.$alert(response.data.message);
-            this.$emit("update");
-          })
-          .catch(error => {
-            this.$alert(error);
-          });
-      } else {
-        alert("Pasirinkite regioną arba grupę");
-      }
+      axios
+      .post("http://" + this.globalURL + "/api/groups", {
+        name: this.group.name,
+        region: this.selectedRegion
+      })
+      .then(response => {
+        this.$alert('Grupė sėkmingai pridėta!');
+        this.$emit("update");
+      })
+      .catch(error => {
+        this.$alert(error);
+      });
     },
 
     submitEdit() {
-      if (this.selectedRegion != null && this.selectedSubDivision != null) {
-        alert("Pasirinkite tik vieną! Regioną arba grupę");
-      } else if (this.selectedRegion != null) {
-        this.selectedSubDivision = null;
-        axios
-          .put("http://" + this.globalURL + "/api/groups/" + this.id, {
-            name: this.group.name,
-            region_id: this.selectedRegion
-          })
-          .then(response => {
-            this.$alert(response.data.message);
-            this.$emit("update");
-          })
-          .catch(error => {
-            this.$alert(error);
-          });
-      } else if (this.selectedSubDivision != null) {
-        axios
-          .put("http://" + this.globalURL + "/api/groups/" + this.id, {
-            name: this.group.name,
-            subdivision_id: this.selectedSubDivision
-          })
-          .then(response => {
-            this.$alert(response.data.message);
-            this.$emit("update");
-          })
-          .catch(error => {
-            this.$alert(error);
-          });
-      } else {
-        alert("Pasirinkite regioną arba grupę");
-      }
+      axios
+      .patch("http://" + this.globalURL + "/api/groups", {
+        name: this.group.name
+      })
+      .then(response => {
+        this.$alert('Grupė sėkmingai atnaujinta!');
+        this.$emit("update");
+      })
+      .catch(error => {
+        this.$alert(error);
+      });
     }
   }
 };
