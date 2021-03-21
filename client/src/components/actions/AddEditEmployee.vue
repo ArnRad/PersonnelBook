@@ -172,13 +172,13 @@
       <li class="buttons">
         <input
           v-show="!this.$route.params.id"
-          @click.prevent="submitAdd"
+          @click="submitAdd"
           type="submit"
           value="Patvirtinti"
         />
         <input
           v-show="this.$route.params.id"
-          @click="submitEdit"
+          @click="submitEdit(employee._id)"
           type="submit"
           value="Redaguoti"
         />
@@ -263,21 +263,21 @@ export default {
         )
         .then(
           response => (
-            (this.employee = response.data.employee),
-            (this.workplace = response.data.employee.workplace),
-            (this.division = response.data.employee.division),
-            (this.subdivision = response.data.employee.subdivision),
-            (this.region = response.data.employee.subdivision.regions[0]),
-            (this.group = response.data.employee.subdivision.groups[0]),
-            (this.subgroup = response.data.employee.subgroup),
-            (this.selectedWorkplace = response.data.employee.workplace.id),
-            (this.selectedDivision = response.data.employee.division.id),
-            (this.selectedSubDivision = response.data.employee.subdivision.id),
-            (this.selectedRegion =
-              response.data.employee.subdivision.regions[0].id),
-            (this.selectedGroup =
-              response.data.employee.subdivision.groups[0].id),
-            (this.selectedSubGroup = response.data.employee.subgroup.id)
+            console.log(response),
+            this.employee._id = response.data._id,
+            this.employee.name = response.data.name,
+            this.employee.lastname = response.data.lastname,
+            this.employee.gender = response.data.gender,
+            this.employee.position = response.data.position,
+            this.employee.email = response.data.email,
+            this.employee.mobile_number = response.data.mobile_number,
+            this.employee.work_number = response.data.work_number,
+            this.selectedWorkplace = response.data.workplace,
+            this.selectedDivision = response.data.division,
+            this.selectedSubDivision = response.data.subdivision,
+            this.selectedRegion = response.data.region,
+            this.selectedGroup = response.data.group,
+            this.selectedSubGroup = response.data.subgroup
           )
         );
     }
@@ -309,7 +309,30 @@ export default {
         });
     },
 
-    submitEdit() {},
+    submitEdit(id) {
+      axios
+        .patch("http://" + this.globalURL + "/api/employees/" + id, {
+          name: this.employee.name,
+          lastname: this.employee.lastname,
+          mobile_number: this.employee.mobile_number,
+          work_number: this.employee.work_number,
+          email: this.employee.email,
+          gender: this.employee.gender,
+          position: this.employee.position,
+          workplace: this.selectedWorkplace,
+          division: this.selectedDivision,
+          subdivision: this.selectedSubDivision,
+          region: this.selectedRegion,
+          group: this.selectedGroup,
+          subgroup: this.selectedSubGroup
+        })
+        .then(response => {
+          this.$alert('Darbuotojas sėkmingai atnaujintas!');
+        })
+        .catch(error => {
+          this.$alert(error);
+        });
+    },
 
     submitFile() {
       let formData = new FormData();

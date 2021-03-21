@@ -46,7 +46,7 @@
                 <input
                   v-show="this.id"
                   type="submit"
-                  @click.prevent="submitEdit()"
+                  @click.prevent="submitEdit(group._id)"
                   value="Redaguoti"
                 />
                 <button @click="$emit('close')">Atšaukti</button>
@@ -113,9 +113,9 @@ export default {
       });
     },
 
-    submitEdit() {
+    submitEdit(id) {
       axios
-      .patch("http://" + this.globalURL + "/api/groups", {
+      .patch("http://" + this.globalURL + "/api/groups/" + id, {
         name: this.group.name
       })
       .then(response => {

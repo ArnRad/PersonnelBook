@@ -95,8 +95,7 @@ export default {
       .then(
         response => (
           (this.Worker = response.data.employees),
-          (this.pageCount = response.data.last_page),
-          console.log(response)
+          (this.pageCount = response.data.last_page)
         )
       );
   },
@@ -148,7 +147,7 @@ export default {
           }
         })
         .then(response => {
-          this.$alert(response.data.message);
+          this.$alert('Darbuotojas pašalintas!');
         });
     },
 

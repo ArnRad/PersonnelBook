@@ -91,12 +91,12 @@ router.patch('/:employeeId', async (req, res) => {
                 avatar: req.body.avatar,
                 gender: req.body.gender,
                 position: req.body.position,
-                workplace_id: req.body.workplace_id,
-                subdivision_id: req.body.subdivision_id,
-                division_id: req.body.division_id,
-                region_id: req.body.region_id,
-                group_id: req.body.group_id,
-                subgroup_id: req.body.subgroup_id
+                workplace: req.body.workplace,
+                subdivision: req.body.subdivision,
+                division: req.body.division,
+                region: req.body.region,
+                group: req.body.group,
+                subgroup: req.body.subgroup
             }}
         );
         res.status(200).json(updateEmployee).send("Vartotojas atnaujintas");
