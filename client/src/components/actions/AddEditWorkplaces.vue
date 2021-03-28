@@ -4,7 +4,7 @@
       <span class="close" @click="$emit('close')">&times;</span>
 
       <div class="form-container">
-        <form class="form">
+        <form class="form" @submit.prevent="submitForm">
           <div class="header-workplace">{{ header }}</div>
           <div class="form-container">
             <ul>
@@ -12,8 +12,8 @@
                 <label for="name">Gatvė</label>
                 <input
                   type="text"
-                  name="name"
-                  maxlength="20"
+                  name="street"
+                  maxlength="30"
                   v-model="workplace.street"
                   required
                 />
@@ -22,8 +22,8 @@
               <li>
                 <label for="name">Numeris</label>
                 <input
-                  type="text"
-                  name="name"
+                  type="number"
+                  name="number"
                   maxlength="20"
                   v-model="workplace.number"
                   required
@@ -34,7 +34,7 @@
                 <label for="name">Miestas</label>
                 <input
                   type="text"
-                  name="name"
+                  name="city"
                   maxlength="20"
                   v-model="workplace.city"
                   required
@@ -45,7 +45,7 @@
                 <label for="name">Šalis</label>
                 <input
                   type="text"
-                  name="name"
+                  name="country"
                   maxlength="20"
                   v-model="workplace.country"
                   required
@@ -56,13 +56,11 @@
                 <input
                   v-show="!this.id"
                   type="submit"
-                  @click.prevent="submitAdd"
                   value="Patvirtinti"
                 />
                 <input
                   v-show="this.id"
                   type="submit"
-                  @click.prevent="submitEdit()"
                   value="Redaguoti"
                 />
                 <button @click="$emit('close')">Atšaukti</button>
@@ -108,8 +106,9 @@ export default {
   },
 
   methods: {
-    submitAdd() {
-      axios
+    submitForm() {
+      if (!this.id) {
+        axios
         .post("http://" + this.globalURL + "/api/workplaces", {
           street: this.workplace.street,
           number: this.workplace.number,
@@ -122,10 +121,8 @@ export default {
         .catch(error => {
           this.$alert(error);
         });
-    },
-
-    submitEdit() {
-      axios
+      } else { 
+        axios
         .patch("http://" + this.globalURL + "/api/workplaces/" + this.id, {
           street: this.workplace.street,
           number: this.workplace.number,
@@ -138,6 +135,7 @@ export default {
         .catch(error => {
           this.$alert(error);
         });
+      }
     }
   }
 };

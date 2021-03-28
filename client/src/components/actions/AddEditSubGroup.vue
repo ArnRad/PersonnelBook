@@ -4,7 +4,7 @@
       <span class="close" @click="$emit('close')">&times;</span>
 
       <div class="form-container">
-        <form class="form">
+        <form class="form" @submit.prevent="submitForm">
           <div class="header-subgroup">{{ header }}</div>
           <div class="form-container">
             <ul>
@@ -40,13 +40,11 @@
                 <input
                   v-show="!this.id"
                   type="submit"
-                  @click.prevent="submitAdd"
                   value="Patvirtinti"
                 />
                 <input
                   v-show="this.id"
                   type="submit"
-                  @click.prevent="submitEdit(subgroup._id)"
                   value="Redaguoti"
                 />
                 <button @click="$emit('close')">Atšaukti</button>
@@ -99,33 +97,33 @@ export default {
   },
 
   methods: {
-    submitAdd() {
-      axios
-        .post("http://" + this.globalURL + "/api/subgroups", {
-          name: this.subgroup.name,
-          group: this.selectedGroup
-        })
-        .then(response => {
-          this.$alert('Pogrupis pridėtas!');
-          this.$emit("update");
-        })
-        .catch(error => {
-          this.$alert(error);
-        });
-    },
-
-    submitEdit(id) {
-      axios
-        .patch("http://" + this.globalURL + "/api/subgroups/" + id, {
-          name: this.subgroup.name
-        })
-        .then(response => {
-          this.$alert('Pogrupis atnaujintas!');
-          this.$emit("update");
-        })
-        .catch(error => {
-          this.$alert(error);
-        });
+    submitForm() {
+      if (!this.id) {
+	      axios
+          .post("http://" + this.globalURL + "/api/subgroups", {
+            name: this.subgroup.name,
+            group: this.selectedGroup
+          })
+          .then(response => {
+            this.$alert('Pogrupis pridėtas!');
+            this.$emit("update");
+          })
+          .catch(error => {
+            this.$alert(error);
+          });
+      } else {
+	      axios
+          .patch("http://" + this.globalURL + "/api/subgroups/" + this.id, {
+            name: this.subgroup.name
+          })
+          .then(response => {
+            this.$alert('Pogrupis atnaujintas!');
+            this.$emit("update");
+          })
+          .catch(error => {
+            this.$alert(error);
+          });
+      }
     }
   }
 };

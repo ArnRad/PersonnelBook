@@ -1,6 +1,6 @@
 <template>
   <div class="form-container">
-    <form class="form">
+    <form class="form" @submit.prevent="submitForm">
       <div class="header-employee">{{ header }}</div>
       <div class="form-container">
         <ul>
@@ -81,6 +81,7 @@
               name="email"
               maxlength="30"
               v-model="employee.email"
+              required
             />
           </li>
 
@@ -98,7 +99,7 @@
           </li>
           <li>
             <label for="region">Regionas</label>
-            <select name="region" v-model="selectedRegion">
+            <select name="region" v-model="selectedRegion" required>
               <template v-for="regionOne in regionsAll">
                 <option
                   :key="regionOne._id"
@@ -172,13 +173,11 @@
       <li class="buttons">
         <input
           v-show="!this.$route.params.id"
-          @click="submitAdd"
           type="submit"
           value="Patvirtinti"
         />
         <input
           v-show="this.$route.params.id"
-          @click="submitEdit(employee._id)"
           type="submit"
           value="Redaguoti"
         />
@@ -263,7 +262,6 @@ export default {
         )
         .then(
           response => (
-            console.log(response),
             this.employee._id = response.data._id,
             this.employee.name = response.data.name,
             this.employee.lastname = response.data.lastname,
@@ -284,54 +282,54 @@ export default {
   },
 
   methods: {
-    submitAdd() {
-      axios
-        .post("http://" + this.globalURL + "/api/employees", {
-          name: this.employee.name,
-          lastname: this.employee.lastname,
-          mobile_number: this.employee.mobile_number,
-          work_number: this.employee.work_number,
-          email: this.employee.email,
-          gender: this.employee.gender,
-          position: this.employee.position,
-          workplace: this.selectedWorkplace,
-          division: this.selectedDivision,
-          subdivision: this.selectedSubDivision,
-          region: this.selectedRegion,
-          group: this.selectedGroup,
-          subgroup: this.selectedSubGroup
-        })
-        .then(response => {
-          this.$alert('Darbuotojas sėkmingai pridėtas!');
-        })
-        .catch(error => {
-          this.$alert(error);
-        });
-    },
-
-    submitEdit(id) {
-      axios
-        .patch("http://" + this.globalURL + "/api/employees/" + id, {
-          name: this.employee.name,
-          lastname: this.employee.lastname,
-          mobile_number: this.employee.mobile_number,
-          work_number: this.employee.work_number,
-          email: this.employee.email,
-          gender: this.employee.gender,
-          position: this.employee.position,
-          workplace: this.selectedWorkplace,
-          division: this.selectedDivision,
-          subdivision: this.selectedSubDivision,
-          region: this.selectedRegion,
-          group: this.selectedGroup,
-          subgroup: this.selectedSubGroup
-        })
-        .then(response => {
-          this.$alert('Darbuotojas sėkmingai atnaujintas!');
-        })
-        .catch(error => {
-          this.$alert(error);
-        });
+    submitForm() {
+      if (!this.$route.params.id) {
+	      axios
+          .post("http://" + this.globalURL + "/api/employees", {
+            name: this.employee.name,
+            lastname: this.employee.lastname,
+            mobile_number: this.employee.mobile_number,
+            work_number: this.employee.work_number,
+            email: this.employee.email,
+            gender: this.employee.gender,
+            position: this.employee.position,
+            workplace: this.selectedWorkplace,
+            division: this.selectedDivision,
+            subdivision: this.selectedSubDivision,
+            region: this.selectedRegion,
+            group: this.selectedGroup,
+            subgroup: this.selectedSubGroup
+          })
+          .then(response => {
+            this.$alert('Darbuotojas sėkmingai pridėtas!');
+          })
+          .catch(error => {
+            this.$alert(error);
+          });
+      } else {
+	      axios
+          .patch("http://" + this.globalURL + "/api/employees/" + this.$route.params.id, {
+            name: this.employee.name,
+            lastname: this.employee.lastname,
+            mobile_number: this.employee.mobile_number,
+            work_number: this.employee.work_number,
+            email: this.employee.email,
+            gender: this.employee.gender,
+            position: this.employee.position,
+            workplace: this.selectedWorkplace,
+            division: this.selectedDivision,
+            subdivision: this.selectedSubDivision,
+            region: this.selectedRegion,
+            group: this.selectedGroup,
+            subgroup: this.selectedSubGroup
+          })
+          .then(response => {
+            this.$alert('Darbuotojas sėkmingai atnaujintas!');
+          })
+          .catch(error => {
+            this.$alert(error);
+          });
+      }
     },
 
     submitFile() {

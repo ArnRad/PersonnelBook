@@ -4,7 +4,7 @@
       <span class="close" @click="$emit('close')">&times;</span>
 
       <div class="form-container">
-        <form class="form">
+        <form class="form" @submit.prevent="submitForm">
           <div class="header-division">{{ header }}</div>
           <div class="form-container">
             <ul>
@@ -20,7 +20,7 @@
               </li>
 
               <li class="checkField" v-if="!this.id">
-                <label>Pasirinkite darbovietes</label>
+                <label for="workplace">Pasirinkite darbovietes</label>
                 <div
                   v-for="workplaceOne in workplacesAll"
                   :key="workplaceOne.id"
@@ -42,13 +42,11 @@
                 <input
                   v-show="!this.id"
                   type="submit"
-                  @click.prevent="submitAdd"
                   value="Patvirtinti"
                 />
                 <input
                   v-show="this.id"
                   type="submit"
-                  @click.prevent="submitEdit(division._id)"
                   value="Redaguoti"
                 />
                 <button @click="$emit('close')">Atšaukti</button>
@@ -101,7 +99,8 @@ export default {
   },
 
   methods: {
-    submitAdd() {
+    submitForm() {
+      if (!this.id) {
       axios
         .post("http://" + this.globalURL + "/api/divisions", {
           name: this.division.name,
@@ -114,20 +113,19 @@ export default {
         .catch(error => {
           this.$alert(error);
         });
-    },
-
-    submitEdit(id) {
-      axios
-        .patch("http://" + this.globalURL + "/api/divisions/" + id, {
-          name: this.division.name
-        })
-        .then(response => {
-          this.$alert('Padalinys atnaujintas!');
-          this.$emit("update");
-        })
-        .catch(error => {
-          this.$alert(error);
-        });
+      } else {
+	      axios
+          .patch("http://" + this.globalURL + "/api/divisions/" + this.id, {
+            name: this.division.name
+          })
+          .then(response => {
+            this.$alert('Padalinys atnaujintas!');
+            this.$emit("update");
+          })
+          .catch(error => {
+            this.$alert(error);
+          });
+      }
     }
   }
 };

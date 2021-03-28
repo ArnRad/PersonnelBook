@@ -25,7 +25,6 @@ router.post('/', async (req, res) => {
             });
             const savedRegion = await new_region.save();
         }
-        console.log(savedRegion)
         res.status(200).send("Regionas pridėtas!");
     } catch (err) {
         res.json({message: err});

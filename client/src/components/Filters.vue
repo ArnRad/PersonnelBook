@@ -11,7 +11,7 @@
           >
             <option value="" selected disabled hidden>Visi</option>
             <template v-for="workplaceOne in workplacesAll">
-              <option :key="workplaceOne.id" :value="workplaceOne.id">
+              <option :key="workplaceOne._id" :value="workplaceOne._id">
                 {{ workplaceOne.street }}
               </option>
             </template>
@@ -26,7 +26,7 @@
           >
             <option value="" selected disabled hidden>Visi</option>
             <template v-for="divisionOne in divisionsAll">
-              <option :key="divisionOne.id" :value="divisionOne.id">
+              <option :key="divisionOne._id" :value="divisionOne._id">
                 {{ divisionOne.name }}
               </option>
             </template>
@@ -37,11 +37,11 @@
           <select
             name="subdivision"
             v-model="selectedSubDivision"
-            @change="loadRegionsGroups()"
+            @change="loadRegions()"
           >
             <option value="" selected disabled hidden>Visi</option>
             <template v-for="subdivisionOne in subdivisionsAll">
-              <option :key="subdivisionOne.id" :value="subdivisionOne.id">
+              <option :key="subdivisionOne._id" :value="subdivisionOne._id">
                 {{ subdivisionOne.name }}
               </option>
             </template>
@@ -49,10 +49,14 @@
         </li>
         <li>
           <label for="region">Regionas</label>
-          <select name="region" v-model="selectedRegion">
+          <select 
+            name="region" 
+            v-model="selectedRegion"
+            @change="loadGroups()"
+          >
             <option value="" selected disabled hidden>Visi</option>
             <template v-for="regionOne in regionAll">
-              <option :key="regionOne.id" :value="regionOne.id">
+              <option :key="regionOne._id" :value="regionOne._id">
                 {{ regionOne.name }}
               </option>
             </template>
@@ -67,7 +71,7 @@
           >
             <option value="" selected disabled hidden>Visi</option>
             <template v-for="groupOne in groupsAll">
-              <option :key="groupOne.id" :value="groupOne.id">
+              <option :key="groupOne._id" :value="groupOne._id">
                 {{ groupOne.name }}
               </option>
             </template>
@@ -78,7 +82,7 @@
           <select name="subgroup" v-model="selectedSubGroup">
             <option value="" selected disabled hidden>Visi</option>
             <template v-for="subgroupOne in subgroupsAll">
-              <option :key="subgroupOne.id" :value="subgroupOne.id">
+              <option :key="subgroupOne._id" :value="subgroupOne._id">
                 {{ subgroupOne.name }}
               </option>
             </template>
@@ -128,7 +132,7 @@
                   >
                     <option value="" selected disabled hidden>Visi</option>
                     <template v-for="workplaceOne in workplacesAll">
-                      <option :key="workplaceOne.id" :value="workplaceOne.id">
+                      <option :key="workplaceOne._id" :value="workplaceOne._id">
                         {{ workplaceOne.street }}
                       </option>
                     </template>
@@ -143,7 +147,7 @@
                   >
                     <option value="" selected disabled hidden>Visi</option>
                     <template v-for="divisionOne in divisionsAll">
-                      <option :key="divisionOne.id" :value="divisionOne.id">
+                      <option :key="divisionOne._id" :value="divisionOne._id">
                         {{ divisionOne.name }}
                       </option>
                     </template>
@@ -154,13 +158,13 @@
                   <select
                     name="subdivision"
                     v-model="selectedSubDivision"
-                    @change="loadRegionsGroups()"
+                    @change="loadRegions()"
                   >
                     <option value="" selected disabled hidden>Visi</option>
                     <template v-for="subdivisionOne in subdivisionsAll">
                       <option
-                        :key="subdivisionOne.id"
-                        :value="subdivisionOne.id"
+                        :key="subdivisionOne._id"
+                        :value="subdivisionOne._id"
                       >
                         {{ subdivisionOne.name }}
                       </option>
@@ -169,10 +173,14 @@
                 </li>
                 <li>
                   <label for="region">Regionas</label>
-                  <select name="region" v-model="selectedRegion">
+                  <select
+                    name="region" 
+                    v-model="selectedRegion"
+                    @change="loadGroups()"
+                    >
                     <option value="" selected disabled hidden>Visi</option>
                     <template v-for="regionOne in regionAll">
-                      <option :key="regionOne.id" :value="regionOne.id">
+                      <option :key="regionOne._id" :value="regionOne._id">
                         {{ regionOne.name }}
                       </option>
                     </template>
@@ -187,7 +195,7 @@
                   >
                     <option value="" selected disabled hidden>Visi</option>
                     <template v-for="groupOne in groupsAll">
-                      <option :key="groupOne.id" :value="groupOne.id">
+                      <option :key="groupOne._id" :value="groupOne._id">
                         {{ groupOne.name }}
                       </option>
                     </template>
@@ -198,7 +206,7 @@
                   <select name="subgroup" v-model="selectedSubGroup">
                     <option value="" selected disabled hidden>Visi</option>
                     <template v-for="subgroupOne in subgroupsAll">
-                      <option :key="subgroupOne.id" :value="subgroupOne.id">
+                      <option :key="subgroupOne._id" :value="subgroupOne._id">
                         {{ subgroupOne.name }}
                       </option>
                     </template>
@@ -261,11 +269,12 @@ export default {
       selectedFilterCount: "",
       searchInput: [],
       workplacesAll: {},
-      divisionsAll: {},
+      divisionsAll: [],
       subdivisionsAll: {},
       regionAll: {},
       groupsAll: {},
       subgroupsAll: {},
+      employeesAll: [],
       active: false
     };
   },
@@ -275,11 +284,14 @@ export default {
       "Bearer " + localStorage.getItem("access_token");
 
     axios
-      .get("http://" + this.globalURL + "/api/employees")
-      .then(response => (this.workplacesAll = response.data.data.workplaces));
+      .get("http://" + this.globalURL + "/api/workplaces")
+      .then(response => (this.workplacesAll = response.data.workplaces));
   },
 
   methods: {
+    distinct (value, index, self) {
+      return self.indexOf(value) === index;
+    },
     toggleFilters() {
       this.active = !this.active;
       this.$emit("layout-check", this.active);
@@ -295,8 +307,8 @@ export default {
         )
         .then(
           response => (
-            (this.divisionsAll = response.data.data.divisions),
-            this.$emit("filter-check", response.data.employees)
+            this.divisionsAll = [...new Map(response.data.divisions.map(item => [item['_id'], item])).values()],
+            this.$emit("filter-check", response.data)
           )
         );
     },
@@ -313,13 +325,13 @@ export default {
         )
         .then(
           response => (
-            (this.subdivisionsAll = response.data.data.subdivisions),
-            this.$emit("filter-check", response.data.employees)
+            this.subdivisionsAll = [...new Map(response.data.subdivisions.map(item => [item['_id'], item])).values()],
+            this.$emit("filter-check", response.data)
           )
         );
     },
 
-    loadRegionsGroups() {
+    loadRegions() {
       axios
         .get(
           "http://" +
@@ -333,9 +345,30 @@ export default {
         )
         .then(
           response => (
-            (this.regionAll = response.data.data.regions),
-            (this.groupsAll = response.data.data.groups),
-            this.$emit("filter-check", response.data.employees)
+            this.regionAll = [...new Map(response.data.regions.map(item => [item['_id'], item])).values()],
+            this.$emit("filter-check", response.data)
+          )
+        );
+    },
+
+    loadGroups() {
+      axios
+        .get(
+          "http://" +
+            this.globalURL +
+            "/api/employees?workplace=" +
+            this.selectedWorkplace +
+            "&division=" +
+            this.selectedDivision +
+            "&subdivision=" +
+            this.selectedSubDivision +
+            "&region=" +
+            this.selectedRegion
+        )
+        .then(
+          response => (
+            this.groupsAll = [...new Map(response.data.groups.map(item => [item['_id'], item])).values()],
+            this.$emit("filter-check", response.data)
           )
         );
     },
@@ -358,8 +391,8 @@ export default {
         )
         .then(
           response => (
-            (this.subgroupsAll = response.data.data.subgroups),
-            this.$emit("filter-check", response.data.employees)
+            this.subgroupsAll = [...new Map(response.data.subgroups.map(item => [item['_id'], item])).values()],
+            this.$emit("filter-check", response.data)
           )
         );
     },
@@ -395,7 +428,7 @@ export default {
             "/api/employees?search=" +
             this.searchInput
         )
-        .then(response => this.$emit("filter-check", response.data.employees));
+        .then(response => this.$emit("filter-check", response.data));
     }
   }
 };

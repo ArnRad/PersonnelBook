@@ -4,7 +4,7 @@
       <span class="close" @click="$emit('close')">&times;</span>
 
       <div class="form-container">
-        <form class="form">
+        <form class="form" @submit.prevent="submitForm">
           <div class="header-subdivision">{{ header }}</div>
           <div class="form-container">
             <ul>
@@ -45,13 +45,11 @@
                 <input
                   v-show="!this.id"
                   type="submit"
-                  @click.prevent="submitAdd"
                   value="Patvirtinti"
                 />
                 <input
                   v-show="this.id"
                   type="submit"
-                  @click.prevent="submitEdit(subdivision._id)"
                   value="Redaguoti"
                 />
                 <button @click="$emit('close')">Atšaukti</button>
@@ -103,33 +101,33 @@ export default {
   },
 
   methods: {
-    submitAdd() {
-      axios
-        .post("http://" + this.globalURL + "/api/subdivisions", {
-          name: this.subdivision.name,
-          division: this.selectedDivision
-        })
-        .then(response => {
-          this.$alert('Skyrius sėkmingai pridėtas!');
-          this.$emit("update");
-        })
-        .catch(error => {
-          this.$alert(error);
-        });
-    },
-
-    submitEdit(id) {
-      axios
-        .patch("http://" + this.globalURL + "/api/subdivisions/" + id, {
-          name: this.subdivision.name,
-        })
-        .then(response => {
-          this.$alert('Skyrius sėkmingai atnaujintas!');
-          this.$emit("update");
-        })
-        .catch(error => {
-          this.$alert(error);
-        });
+    submitForm() {
+      if (!this.id) {
+	      axios
+          .post("http://" + this.globalURL + "/api/subdivisions", {
+            name: this.subdivision.name,
+            division: this.selectedDivision
+          })
+          .then(response => {
+            this.$alert('Skyrius sėkmingai pridėtas!');
+            this.$emit("update");
+          })
+          .catch(error => {
+            this.$alert(error);
+          });
+      } else {
+	      axios
+          .patch("http://" + this.globalURL + "/api/subdivisions/" + this.id, {
+            name: this.subdivision.name,
+          })
+          .then(response => {
+            this.$alert('Skyrius sėkmingai atnaujintas!');
+            this.$emit("update");
+          })
+          .catch(error => {
+            this.$alert(error);
+          });
+      }
     }
   }
 };

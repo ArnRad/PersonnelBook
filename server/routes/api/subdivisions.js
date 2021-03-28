@@ -26,7 +26,6 @@ router.post('/', async (req, res) => {
             });
             const savedSubdivision = await new_subdivision.save();
         }
-        console.log(savedSubdivision)
         res.status(200).send("Skyrius pridėtas!");
     } catch (err) {
         res.json({message: err});

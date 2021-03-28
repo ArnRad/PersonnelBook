@@ -92,7 +92,8 @@ export default {
       isActiveLayout: false,
       DisplayWorker: {},
       displayView: false,
-      active: false
+      active: false,
+      filterValue: ''
     };
   },
 
@@ -120,9 +121,18 @@ export default {
     },
 
     pagePaginationClick(pageNum) {
-      axios
-        .get("http://" + this.globalURL + "/api/employees?page=" + pageNum)
-        .then(response => (this.Employee = response.data.employees));
+      if (this.filterValue) {
+        let groups = []
+        for(let i = 0; i < this.filterValue.employeesAll.length; i += this.filterValue.per_page)
+        {
+            groups.push(this.filterValue.employeesAll.slice(i, i + this.filterValue.per_page));
+        }
+        this.Employee = groups[pageNum - 1]
+      } else {
+        axios
+          .get("http://" + this.globalURL + "/api/employees?page=" + pageNum)
+          .then(response => (this.Employee = response.data.employees));
+      }
     },
 
     toggleViewForm(value) {
@@ -137,6 +147,7 @@ export default {
     },
 
     filterOn(value) {
+      this.filterValue = value;
       this.Employee = value.employees;
       this.employeeCount = value.total;
       this.pageCount = value.last_page;

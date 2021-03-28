@@ -48,7 +48,6 @@ app.use('/api/subgroups', subgroups);
 
 // Connect to DB
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true }, () => {
-    // console.log('Connected to DB!')
 });
 
 const port = process.env.PORT || 5000;

@@ -3,7 +3,7 @@
     <div class="modal-content">
       <span class="close" @click="$emit('close')">&times;</span>
       <div class="form-container">
-        <form class="form">
+        <form class="form" @submit.prevent="submitForm">
           <div class="header-region">{{ header }}</div>
           <div class="form-container">
             <ul>
@@ -39,13 +39,11 @@
                 <input
                   v-show="!this.id"
                   type="submit"
-                  @click.prevent="submitAdd"
                   value="Patvirtinti"
                 />
                 <input
                   v-show="this.id"
                   type="submit"
-                  @click.prevent="submitEdit(region._id)"
                   value="Redaguoti"
                 />
                 <button @click="$emit('close')">Atšaukti</button>
@@ -100,33 +98,33 @@ export default {
   },
 
   methods: {
-    submitAdd() {
-      axios
-        .post("http://" + this.globalURL + "/api/regions", {
-          name: this.region.name,
-          subdivision: this.selectedSubDivision
-        })
-        .then(response => {
-          this.$alert('Regionas sėkmingai pridėtas!');
-          this.$emit("update");
-        })
-        .catch(error => {
-          this.$alert(error);
-        });
-    },
-
-    submitEdit(id) {
-      axios
-        .patch("http://" + this.globalURL + "/api/regions/" + id, {
-          name: this.region.name
-        })
-        .then(response => {
-          this.$alert('Regionas sėkmingai atnaujintas!');
-          this.$emit("update");
-        })
-        .catch(error => {
-          this.$alert(error);
-        });
+    submitForm() {
+      if (!this.id) {
+	      axios
+          .post("http://" + this.globalURL + "/api/regions", {
+            name: this.region.name,
+            subdivision: this.selectedSubDivision
+          })
+          .then(response => {
+            this.$alert('Regionas sėkmingai pridėtas!');
+            this.$emit("update");
+          })
+          .catch(error => {
+            this.$alert(error);
+          });
+      } else {
+	      axios
+          .patch("http://" + this.globalURL + "/api/regions/" + this.id, {
+            name: this.region.name
+          })
+          .then(response => {
+            this.$alert('Regionas sėkmingai atnaujintas!');
+            this.$emit("update");
+          })
+          .catch(error => {
+            this.$alert(error);
+          });
+      }
     }
   }
 };

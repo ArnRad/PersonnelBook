@@ -4,7 +4,7 @@
       <span class="close" @click="$emit('close')">&times;</span>
 
       <div class="form-container">
-        <form class="form">
+        <form class="form" @submit.prevent="submitForm">
           <div class="header-user">{{ header }}</div>
           <div class="form-container">
             <ul>
@@ -152,14 +152,12 @@
                 <button
                   v-show="!this.id"
                   type="submit"
-                  @click.prevent="submitAdd"
                 >
                   Patvirtinti
                 </button>
                 <button
                   v-show="this.id"
                   type="submit"
-                  @click.prevent="submitEdit()"
                 >
                   Redaguoti
                 </button>
@@ -184,9 +182,6 @@ export default {
       header: "Pridėti naują vartotoją",
       user: {},
       selectedPermissions: []
-      // selectedStructures: [],
-      // selectedWorkplaces: [],
-      // selectedUsers: []
     };
   },
 
@@ -213,40 +208,40 @@ export default {
   },
 
   methods: {
-    submitAdd() {
-      axios
-        .post("http://" + this.globalURL + "/api/users", {
-          name: this.user.name,
-          surname: this.user.surname,
-          email: this.user.email,
-          confirmed_email: this.user.confirmed_email,
-          permissions: this.selectedPermissions
-        })
-        .then(response => {
-          this.$alert('Vartotojas pridėtas!');
-          this.$emit("update");
-        })
-        .catch(error => {
-          this.$alert(error);
-        });
-    },
-
-    submitEdit() {
-      axios
-        .patch("http://" + this.globalURL + "/api/users/" + this.id, {
-          name: this.user.name,
-          surname: this.user.surname,
-          email: this.user.email,
-          confirmed_email: this.user.confirmed_email,
-          permissions: this.selectedPermissions
-        })
-        .then(response => {
-          this.$alert('Vartotojas atnaujintas');
-          this.$emit("update");
-        })
-        .catch(error => {
-          this.$alert(error);
-        });
+    submitForm() {
+      if (!this.id) {
+	      axios
+          .post("http://" + this.globalURL + "/api/users", {
+            name: this.user.name,
+            surname: this.user.surname,
+            email: this.user.email,
+            confirmed_email: this.user.confirmed_email,
+            permissions: this.selectedPermissions
+          })
+          .then(response => {
+            this.$alert('Vartotojas pridėtas!');
+            this.$emit("update");
+          })
+          .catch(error => {
+            this.$alert(error);
+          });
+      } else {
+	      axios
+          .patch("http://" + this.globalURL + "/api/users/" + this.id, {
+            name: this.user.name,
+            surname: this.user.surname,
+            email: this.user.email,
+            confirmed_email: this.user.confirmed_email,
+            permissions: this.selectedPermissions
+          })
+          .then(response => {
+            this.$alert('Vartotojas atnaujintas');
+            this.$emit("update");
+          })
+          .catch(error => {
+            this.$alert(error);
+          });
+      }
     },
 
     editCheck(array, text) {
