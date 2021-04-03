@@ -307,7 +307,7 @@ export default {
         )
         .then(
           response => (
-            this.divisionsAll = [...new Map(response.data.divisions.map(item => [item['_id'], item])).values()],
+            this.divisionsAll = response.data.divisions ? [...new Map(response.data.divisions.map(item => [item['_id'], item])).values()] : [],
             this.$emit("filter-check", response.data)
           )
         );
@@ -325,7 +325,7 @@ export default {
         )
         .then(
           response => (
-            this.subdivisionsAll = [...new Map(response.data.subdivisions.map(item => [item['_id'], item])).values()],
+            this.subdivisionsAll = response.data.subdivisions ? [...new Map(response.data.subdivisions.map(item => [item['_id'], item])).values()] : [],
             this.$emit("filter-check", response.data)
           )
         );
@@ -345,7 +345,7 @@ export default {
         )
         .then(
           response => (
-            this.regionAll = [...new Map(response.data.regions.map(item => [item['_id'], item])).values()],
+            this.regionAll = response.data.regions ? [...new Map(response.data.regions.map(item => [item['_id'], item])).values()] : [],
             this.$emit("filter-check", response.data)
           )
         );
@@ -367,7 +367,7 @@ export default {
         )
         .then(
           response => (
-            this.groupsAll = [...new Map(response.data.groups.map(item => [item['_id'], item])).values()],
+            this.groupsAll = response.data.groups ? [...new Map(response.data.groups.map(item => [item['_id'], item])).values()] : [],
             this.$emit("filter-check", response.data)
           )
         );
@@ -391,7 +391,7 @@ export default {
         )
         .then(
           response => (
-            this.subgroupsAll = [...new Map(response.data.subgroups.map(item => [item['_id'], item])).values()],
+            this.subgroupsAll = response.data.subgroups ? [...new Map(response.data.subgroups.map(item => [item['_id'], item])).values()] : [],
             this.$emit("filter-check", response.data)
           )
         );

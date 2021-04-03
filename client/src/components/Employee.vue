@@ -147,10 +147,19 @@ export default {
     },
 
     filterOn(value) {
-      this.filterValue = value;
-      this.Employee = value.employees;
-      this.employeeCount = value.total;
-      this.pageCount = value.last_page;
+      console.log(value)
+      if (value.divisions || value.search) {
+        this.filterValue = value;
+        this.Employee = value.employees;
+        this.employeeCount = value.total;
+        this.pageCount = value.last_page;
+      }
+      else {
+        this.filterValue = '';
+        this.Employee = [];
+        this.employeeCount = 0;
+        this.pageCount = 1;
+      }
     },
 
     layoutOn(value) {

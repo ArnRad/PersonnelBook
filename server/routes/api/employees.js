@@ -149,7 +149,8 @@ router.get('/', async (req, res) => {
                 const startIndex = (page - 1) * limit;
                 const endIndex = page * limit;
                 const employees = resultEmployees.slice(startIndex, endIndex);
-                res.status(200).json({ total: total , last_page: pages, per_page: limit, employees, employeesAll});
+                const search = 1;
+                res.status(200).json({ total: total , last_page: pages, per_page: limit, employees, employeesAll, search});
             });
         }
         else {
