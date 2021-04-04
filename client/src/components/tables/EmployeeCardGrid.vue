@@ -3,8 +3,9 @@
     <div class="employee-card" @click="$emit('view', employee._id)">
       <div class="employee-data">
         <div class="employee-avatar">
-          <!--<img :src="employee.avatar" />-->
+          <img v-if="employee.avatar" :src="require(`../../../../server/uploads/images/${employee.avatar}`)" />
           <img
+            v-else
             src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?f=y"
           />
         </div>

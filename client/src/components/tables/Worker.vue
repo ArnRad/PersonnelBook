@@ -1,8 +1,9 @@
 <template>
   <tr>
     <td>
-      <!--<img :src="employee.avatar" />-->
+      <img v-if="worker.avatar" :src="require(`../../../../server/uploads/images/${worker.avatar}`)" />
       <img
+        v-else
         src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?f=y"
       />
     </td>

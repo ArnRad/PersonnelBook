@@ -147,7 +147,6 @@ export default {
     },
 
     filterOn(value) {
-      console.log(value)
       if (value.divisions || value.search) {
         this.filterValue = value;
         this.Employee = value.employees;

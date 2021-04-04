@@ -1,5 +1,37 @@
 const express = require('express');
 const Employee = require('../../models/Employee');
+const multer = require('multer')
+
+const storage = multer.diskStorage({
+    destination: function(req, file, callback) {
+        callback(null, './server/uploads/images')
+    },
+    filename: function(req, file, callback) {
+        callback(null, Date.now() + file.originalname)
+    }
+})
+
+const fileFilter = function(req, file, callback) {
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"]
+
+    if(!allowedTypes.includes(file.mimetype)) {
+        const error = new Error("Wrong file type")
+        error.code = "LIMIT_FILE_TYPES"
+        return callback(error, false)
+    }
+
+    callback(null, true)
+}
+
+const MAX_SIZE = 200000
+
+const upload = multer({
+    storage: storage,
+    fileFilter,
+    limits: {
+        fileSize: MAX_SIZE
+    }
+})
 
 const router = express.Router();
 
@@ -179,22 +211,22 @@ router.get('/', async (req, res) => {
 
 // Add Employees
 
-router.post('/', async (req, res) => {
+router.post('/', upload.single('file') , async (req, res) => {
     const new_employee = new Employee({
         name: req.body.name,
         lastname: req.body.lastname,
         mobile_number: req.body.mobile_number,
         work_number: req.body.work_number,
         email: req.body.email,
-        avatar: req.body.avatar,
+        avatar: req.file.filename,
         gender: req.body.gender,
         position: req.body.position,
-        workplace: req.body.workplace,
-        subdivision: req.body.subdivision,
-        division: req.body.division,
-        region: req.body.region,
-        group: req.body.group,
-        subgroup: req.body.subgroup
+        workplace: JSON.parse(req.body.workplace),
+        subdivision: JSON.parse(req.body.subdivision),
+        division: JSON.parse(req.body.division),
+        region: JSON.parse(req.body.region),
+        group: JSON.parse(req.body.group),
+        subgroup: JSON.parse(req.body.subgroup)
     });
     try {
         const savedEmployee = await new_employee.save();
@@ -230,7 +262,7 @@ router.delete('/:employeeId', async (req, res) => {
 
 // Update Employee
 
-router.patch('/:employeeId', async (req, res) => {
+router.patch('/:employeeId', upload.single('file'), async (req, res) => {
     try {
         const updateEmployee = await Employee.updateOne(
             {_id: req.params.employeeId}, 
@@ -240,15 +272,15 @@ router.patch('/:employeeId', async (req, res) => {
                 mobile_number: req.body.mobile_number,
                 work_number: req.body.work_number,
                 email: req.body.email,
-                avatar: req.body.avatar,
+                avatar: req.file.filename,
                 gender: req.body.gender,
                 position: req.body.position,
-                workplace: req.body.workplace,
-                subdivision: req.body.subdivision,
-                division: req.body.division,
-                region: req.body.region,
-                group: req.body.group,
-                subgroup: req.body.subgroup
+                workplace: JSON.parse(req.body.workplace),
+                subdivision: JSON.parse(req.body.subdivision),
+                division: JSON.parse(req.body.division),
+                region: JSON.parse(req.body.region),
+                group: JSON.parse(req.body.group),
+                subgroup: JSON.parse(req.body.subgroup)
             }}
         );
         res.status(200).json(updateEmployee).send("Vartotojas atnaujintas");
@@ -257,10 +289,20 @@ router.patch('/:employeeId', async (req, res) => {
     }
 });
 
-// Functions
+router.use(function(err, req, res, next) {
+    if(err.code === "LIMIT_FILE_TYPES") {
+        console.log(err)
+        res.status(422).json({error: "Galimi nuotraukos formatai - .jpg .jpeg .png"})
+        return
+    }
+    
+    if(err.code === "LIMIT_FILE_SIZE") {
+        console.log(err)
+        res.status(422).json({error: `Failas per didelis. Didžiausias failo dydis ${MAX_SIZE/1000}Kb`})
+        return
+    }
+})
 
-function escapeRegex(text) {
-    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-};
+// Functions
 
 module.exports = router;

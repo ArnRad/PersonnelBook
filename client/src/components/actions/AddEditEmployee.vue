@@ -1,6 +1,6 @@
 <template>
   <div class="form-container">
-    <form class="form" @submit.prevent="submitForm">
+    <form class="form" @submit.prevent="submitForm" enctype="multipart/form-data">
       <div class="header-employee">{{ header }}</div>
       <div class="form-container">
         <ul>
@@ -160,14 +160,16 @@
         </ul>
       </div>
       <li class="add-image">
+        Darbuotojo nuotrauka
         <input
           type="file"
           ref="file"
+          @change="selectFile"
           hidden="hidden"
-          @change="handleFileUpload()"
         />
-        <p>Darbuotojo nuotrauka</p>
-        <button @click="submitFile()" type="button">Įkelti</button>
+        <button @click="clickInput" type="button" id="custom-button"> Įkelti </button>
+        <span v-if="file || fileName">{{fileName}}</span>
+        <span v-else>Nėra įkeltos nuotraukos</span>
       </li>
 
       <li class="buttons">
@@ -196,6 +198,7 @@ export default {
   data() {
     return {
       file: "",
+      fileName: "",
       testDivisionsAll: [],
       workplacesAll: {},
       divisionsAll: {},
@@ -270,6 +273,7 @@ export default {
             this.employee.email = response.data.email,
             this.employee.mobile_number = response.data.mobile_number,
             this.employee.work_number = response.data.work_number,
+            this.fileName = response.data.avatar,
             this.selectedWorkplace = response.data.workplace,
             this.selectedDivision = response.data.division,
             this.selectedSubDivision = response.data.subdivision,
@@ -283,76 +287,50 @@ export default {
 
   methods: {
     submitForm() {
+      const formData = new FormData();
+      formData.append('file', this.file)
+      formData.append('name', this.employee.name)
+      formData.append('lastname', this.employee.lastname)
+      formData.append('mobile_number', this.employee.mobile_number)
+      formData.append('work_number', this.employee.work_number)
+      formData.append('email', this.employee.email)
+      formData.append('gender', this.employee.gender)
+      formData.append('position', this.employee.position)
+      formData.append('workplace', JSON.stringify(this.selectedWorkplace))
+      formData.append('division', JSON.stringify(this.selectedDivision))
+      formData.append('subdivision', JSON.stringify(this.selectedSubDivision))
+      formData.append('region', JSON.stringify(this.selectedRegion))
+      formData.append('group', JSON.stringify(this.selectedGroup))
+      formData.append('subgroup', JSON.stringify(this.selectedSubGroup))
       if (!this.$route.params.id) {
 	      axios
-          .post("http://" + this.globalURL + "/api/employees", {
-            name: this.employee.name,
-            lastname: this.employee.lastname,
-            mobile_number: this.employee.mobile_number,
-            work_number: this.employee.work_number,
-            email: this.employee.email,
-            gender: this.employee.gender,
-            position: this.employee.position,
-            workplace: this.selectedWorkplace,
-            division: this.selectedDivision,
-            subdivision: this.selectedSubDivision,
-            region: this.selectedRegion,
-            group: this.selectedGroup,
-            subgroup: this.selectedSubGroup
-          })
+          .post("http://" + this.globalURL + "/api/employees", formData)
           .then(response => {
             this.$alert('Darbuotojas sėkmingai pridėtas!');
           })
           .catch(error => {
-            this.$alert(error);
+            this.$alert(error.response.data.error);
           });
       } else {
 	      axios
-          .patch("http://" + this.globalURL + "/api/employees/" + this.$route.params.id, {
-            name: this.employee.name,
-            lastname: this.employee.lastname,
-            mobile_number: this.employee.mobile_number,
-            work_number: this.employee.work_number,
-            email: this.employee.email,
-            gender: this.employee.gender,
-            position: this.employee.position,
-            workplace: this.selectedWorkplace,
-            division: this.selectedDivision,
-            subdivision: this.selectedSubDivision,
-            region: this.selectedRegion,
-            group: this.selectedGroup,
-            subgroup: this.selectedSubGroup
-          })
+          .patch("http://" + this.globalURL + "/api/employees/" + this.$route.params.id, formData)
           .then(response => {
             this.$alert('Darbuotojas sėkmingai atnaujintas!');
           })
           .catch(error => {
-            this.$alert(error);
+            this.$alert(error.response.data.error);
           });
       }
     },
 
-    submitFile() {
-      let formData = new FormData();
-      formData.append("file", this.file);
-
-      axios
-        .post("http://" + this.globalURL + "/api/avatars", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data"
-          }
-        })
-        .then(function() {
-          console.log("SUCCESS!!");
-        })
-        .catch(function() {
-          console.log("FAILURE!!");
-        });
+    selectFile () {
+      this.file = this.$refs.file.files[0]
+      if (this.file) {
+        this.fileName = this.file.name
+      }
     },
-
-    handleFileUpload() {
-      this.file = this.$refs.file.files[0];
-      console.log(this.file);
+    clickInput() {
+      this.$refs.file.click()
     }
   }
 };

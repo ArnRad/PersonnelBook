@@ -57,6 +57,9 @@ const EmployeeSchema = mongoose.Schema(
         subgroup: {
             type: Object,
             required: true
+        },
+        avatar: {
+            type: String
         }
     },
     {
