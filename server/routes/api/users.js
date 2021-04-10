@@ -97,7 +97,28 @@ router.patch('/:userId', async (req, res) => {
     }
 });
 
+router.post('/changepass', async (req, res) => {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt); 
+
+    const updateUser = await User.updateOne(
+        { name: req.body.name }, 
+        { password: hashedPassword });
+        
+    res.status(200).send({message: "Slaptažodis sėkmingai pakeistas!"});
+});
+
+router.post('/changemail', async (req, res) => {
+
+    const updateUser = await User.updateOne(
+        { name: req.body.name }, 
+        { email: req.body.email, confirmed_email: req.body.confirmed_email });
+        
+    res.status(200).send({message:"El. paštas sėkmingai pakeistas!"});
+});
+
 // Functions
+
 
 
 module.exports = router;

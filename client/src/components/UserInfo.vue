@@ -28,7 +28,7 @@
             </li>
 
             <li class="buttons">
-              <button @click="submitEmailChange">
+              <button @click.prevent="submitEmailChange">
                 Keisti
               </button>
               <button
@@ -47,17 +47,6 @@
         <form class="form">
           <h1>Keisti slaptažodį</h1>
           <ul>
-            <li>
-              <label for="password-curr">Dabartinis slaptažodis</label>
-              <input
-                type="password"
-                name="password-curr"
-                maxlength="30"
-                v-model="password_curr"
-                required
-              />
-            </li>
-
             <li>
               <label for="password">Naujas slaptažodis</label>
               <input
@@ -83,13 +72,13 @@
             </li>
 
             <li class="buttons">
-              <button @click="submitPasswordChange">
+              <button @click.prevent="submitPasswordChange">
                 Keisti
               </button>
               <button
                 @click.prevent="
-                  email = '';
-                  confirmed_email = '';
+                  password = '';
+                  password_confirmation = '';
                 "
               >
                 Atšaukti
@@ -113,39 +102,51 @@ export default {
       email: "",
       confirmed_email: "",
       password: "",
-      password_confirmation: "",
-      password_curr: ""
+      password_confirmation: ""
     };
   },
 
   methods: {
     submitEmailChange() {
-      axios
-        .post("http://" + this.globalURL + "/api/change/email", {
+      if (this.email === this.confirmed_email) {
+        axios
+        .post("http://" + this.globalURL + "/api/users/changemail", {
+          name: localStorage.getItem("user_name"),
           email: this.email,
           confirmed_email: this.confirmed_email
         })
         .then(response => {
           this.$alert(response.data.message);
+          this.email = ''
+          this.confirmed_email = ''
         })
         .catch(error => {
           this.$alert(error);
         });
+      } else {
+        this.$alert("El.pašto adresai nesutampa! Bandykite dar kartą");
+      }
     },
 
     submitPasswordChange() {
-      axios
-        .post("http://" + this.globalURL + "/api/change/password", {
-          password_curr: this.password_curr,
-          password: this.password,
-          password_confirmation: this.password_confirmation
-        })
-        .then(response => {
-          this.$alert(response.data.message);
-        })
-        .catch(error => {
-          this.$alert(error);
-        });
+      if (this.password === this.password_confirmation) {
+        axios
+          .post("http://" + this.globalURL + "/api/users/changepass", {
+            name: localStorage.getItem("user_name"),
+            password: this.password,
+            password_confirmation: this.password_confirmation
+          })
+          .then(response => {
+            this.$alert(response.data.message);
+            this.password = ''
+            this.password_confirmation = ''
+          })
+          .catch(error => {
+            this.$alert(error);
+          });
+      } else {
+        this.$alert("Slaptažodžiai nesutampa! Bandykite dar kartą");
+      }
     }
   }
 };
