@@ -23,11 +23,11 @@
             Darbovietės
           </div></router-link
         >
-        <Dropdown
-          v-if="haveAccess('admin')"
-          title="Administratoriai"
-          :items="adminpages"
-        />
+        <router-link to="/adminusers"
+          ><div v-if="haveAccess('admin')" class="nav-item">
+            Administratoriai
+          </div></router-link
+        >
       </div>
 
       <div class="burger-menu">
@@ -47,11 +47,11 @@
               Darbovietės
             </div></router-link
           >
-          <Dropdown
-            v-if="haveAccess('admin')"
-            title="Administratoriai"
-            :items="adminpages"
-          />
+          <router-link to="/adminusers"
+            ><div v-if="haveAccess('admin')" class="nav-item">
+              Administratoriai
+            </div></router-link
+          >
 
           <div class="slide-actions">
             <router-link
@@ -93,17 +93,6 @@ export default {
 
   data() {
     return {
-      adminpages: [
-        {
-          title: "Paskyros",
-          link: "/adminusers"
-        },
-        {
-          title: "Veiksmai",
-          link: "/activitylog"
-        }
-      ],
-
       Username: localStorage.getItem("user_name")
     };
   },

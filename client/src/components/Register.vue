@@ -1,16 +1,30 @@
 <template>
   <div class="table-container">
     <div class="admin-table">
-      <form class="form" @submit.prevent="login">
+      <form class="form" @submit.prevent="register">
         <div class="header-login">
             <!-- <img alt="logo" src="../assets/logo.png"/> -->
-            <p>Prisijunkite</p>
+            <p>Registracija</p>
         </div>
         <div class="form-container">
           <ul>
             <li>
-              <label for="username">Vartotojo vardas</label>
+              <label for="username">Vardas</label>
               <input type="text" v-model="username" />
+            </li>
+            <li>
+              <label for="surname">Pavardė</label>
+              <input type="text" v-model="surname" />
+            </li>
+
+            <li>
+              <label for="email">El.paštas</label>
+              <input type="email" v-model="email" />
+            </li>
+
+            <li>
+              <label for="email">Patvirtinkite El.paštą</label>
+              <input type="email" v-model="email_confirmed" />
             </li>
 
             <li>
@@ -18,7 +32,7 @@
               <input type="password" v-model="password" />
             </li>
             <div class="buttons">
-              <button type="submit" class="login-button">Prisijungti</button>
+              <button type="submit" class="login-button">Registruotis</button>
             </div>
           </ul>
         </div>
@@ -37,7 +51,10 @@ export default {
   data() {
     return {
       username: "",
-      password: ""
+      surname: "",
+      password: "",
+      email: "",
+      email_confirmed: ""
     };
   },
 
@@ -48,8 +65,8 @@ export default {
   },
 
   methods: {
-    login() {
-      Axios.post("http://" + this.globalURL + "/api/login", {
+    register() {
+      Axios.post("http://" + this.globalURL + "/api/register", {
         name: this.username,
         password: this.password
       }).then(response => {

@@ -8,7 +8,7 @@
         @update="getUsers()"
       />
       <div class="users">
-        <div class="users-header">Paskyros</div>
+        <div class="users-header">Administratorių paskyros</div>
         <div class="actions">
           <div class="buttons">
             <button @click="toggleViewForm()" class="button-add">
@@ -143,7 +143,7 @@ export default {
         height: 84px;
         width: 100%;
 
-        font-size: 18px;
+        font-size: 21px;
         color: #00264c;
         border-bottom: 1px solid rgba(196, 196, 196, 0.3);
       }

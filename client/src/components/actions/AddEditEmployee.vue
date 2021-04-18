@@ -19,7 +19,7 @@
             <input
               type="text"
               name="position"
-              maxlength="20"
+              maxlength="30"
               v-model="employee.position"
               required
             />

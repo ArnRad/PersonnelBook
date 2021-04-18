@@ -106,7 +106,7 @@ export default {
             }
           })
           .then(response => {
-            this.$alert('Grupė ištrintas');
+            this.$alert('Grupė ištrinta');
             this.getGroups();
           });
       } else {

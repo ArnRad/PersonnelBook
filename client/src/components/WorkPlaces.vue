@@ -67,20 +67,22 @@ export default {
 
   created() {
     axios.defaults.headers.common["Authorization"] =
-      "Bearer " + localStorage.getItem("access_token");
-
-    axios
-      .get("http://" + this.globalURL + "/api/workplaces")
-      .then(response => (this.workPlaces = response.data.workplaces));
-
-    axios
-      .get("http://" + this.globalURL + "/api/divisions")
-      .then(response => {
-        (this.Divisions = response.data.divisions)
-      });
+    "Bearer " + localStorage.getItem("access_token");
+    this.getData()
   },
 
   methods: {
+    getData() {
+      axios
+        .get("http://" + this.globalURL + "/api/workplaces")
+        .then(response => (this.workPlaces = response.data.workplaces));
+
+      axios
+        .get("http://" + this.globalURL + "/api/divisions")
+        .then(response => {
+          (this.Divisions = response.data.divisions)
+        });
+    },
     deleteGroup(id) {
       let allowDelete = true;
 
@@ -103,6 +105,7 @@ export default {
         })
         .then(response => {
           this.$alert('Darbovietė pašalinta!');
+          this.getData()
         });
       } else {
         this.$alert('Pirma ištrinkite visus padalinius priklausančius šiai darbovietei!');

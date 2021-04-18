@@ -9,9 +9,6 @@
               <img src="../assets/addWorkerIcon.png" />Pridėti darbuotoją
             </button>
           </router-link>
-          <button @click="exportWorkers()" class="button export">
-            <img src="../assets/exportWorkerIcon.png" />Eksportuoti darbuotojus
-          </button>
         </div>
         <div class="search-bar">
           <li>
@@ -49,15 +46,17 @@
           </tbody>
         </table>
       </div>
-      <Paginate
-        :page-count="this.pageCount"
-        :prev-text="'<'"
-        :next-text="'>'"
-        :page-class="'pagination-item'"
-        :container-class="'pagination'"
-        :click-handler="pagePaginationClick"
-      >
-      </Paginate>
+      <template v-if="this.pageCount">
+        <Paginate
+          :page-count="this.pageCount"
+          :prev-text="'<'"
+          :next-text="'>'"
+          :page-class="'pagination-item'"
+          :container-class="'pagination'"
+          :click-handler="pagePaginationClick"
+        >
+        </Paginate>
+      </template>
     </div>
   </div>
 </template>
@@ -90,43 +89,26 @@ export default {
   },
 
   mounted() {
-    axios
-      .get("http://" + this.globalURL + "/api/employees?limit=8")
-      .then(
-        response => (
-          (this.Worker = response.data.employees),
-          (this.pageCount = response.data.last_page)
-        )
-      );
+    this.getData()
   },
 
   methods: {
+    getData() {
+      axios
+        .get("http://" + this.globalURL + "/api/employees?limit=8")
+        .then(
+          response => (
+            (this.Worker = response.data.employees),
+            (this.pageCount = response.data.last_page)
+          )
+        );
+    },
     pagePaginationClick(pageNum) {
       axios
         .get(
           "http://" + this.globalURL + "/api/employees?limit=8&page=" + pageNum
         )
         .then(response => (this.Worker = response.data.employees));
-    },
-
-    exportWorkers() {
-      axios.defaults.headers.common["Authorization"] =
-        "Bearer " + localStorage.getItem("access_token");
-
-      axios({
-        url: "http://" + this.globalURL + "/api/employees/export",
-        method: "GET",
-        responseType: "blob"
-      }).then(response => {
-        var fileURL = window.URL.createObjectURL(new Blob([response.data]));
-        var fileLink = document.createElement("a");
-
-        fileLink.href = fileURL;
-        fileLink.setAttribute("download", "employees.csv");
-        document.body.appendChild(fileLink);
-
-        fileLink.click();
-      });
     },
 
     deleteEmployee(id) {
@@ -148,6 +130,7 @@ export default {
         })
         .then(response => {
           this.$alert('Darbuotojas pašalintas!');
+          this.getData()
         });
     },
 

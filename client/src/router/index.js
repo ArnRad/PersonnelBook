@@ -3,12 +3,12 @@ import axios from "axios";
 import Router from "vue-router";
 import Employee from "@/components/Employee";
 import Login from "@/components/Login";
+import Register from "@/components/Register"
 import Workers from "@/components/Workers";
 import Structure from "@/components/Structure";
 import WorkPlaces from "@/components/WorkPlaces";
 import AdminUsers from "@/components/AdminUsers";
 import AddEditEmployee from "@/components/actions/AddEditEmployee";
-import ActivityLog from "@/components/ActivityLog";
 import PageNotFound from "@/components/PageNotFound";
 import UserInfo from "@/components/UserInfo";
 import VueJwtDecode from "vue-jwt-decode";
@@ -31,6 +31,11 @@ const router = new Router({
       path: "/login",
       name: "Login",
       component: Login
+    },
+    {
+      path: "/register",
+      name: "Register",
+      component: Register
     },
     {
       path: "/employees",
@@ -66,12 +71,6 @@ const router = new Router({
       path: "/adminusers",
       name: "AdminUsers",
       component: AdminUsers,
-      meta: { requiresAuth: true, permission: "admin" }
-    },
-    {
-      path: "/activitylog",
-      name: "ActivityLog",
-      component: ActivityLog,
       meta: { requiresAuth: true, permission: "admin" }
     },
     {

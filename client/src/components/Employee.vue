@@ -50,15 +50,17 @@
         </div>
       </div>
     </div>
-    <Paginate
-      :page-count="this.pageCount"
-      :prev-text="'<'"
-      :next-text="'>'"
-      :page-class="'pagination-item'"
-      :container-class="'pagination'"
-      :click-handler="pagePaginationClick"
-    >
-    </Paginate>
+    <template v-if="this.pageCount">
+      <Paginate
+        :page-count="this.pageCount"
+        :prev-text="'<'"
+        :next-text="'>'"
+        :page-class="'pagination-item'"
+        :container-class="'pagination'"
+        :click-handler="pagePaginationClick"
+      >
+      </Paginate>
+    </template>
   </div>
 </template>
 
@@ -147,13 +149,13 @@ export default {
     },
 
     filterOn(value) {
-      if (value.divisions || value.search) {
+      console.log(value)
+      if (value.divisions || value.search || value.per_page) {
         this.filterValue = value;
         this.Employee = value.employees;
         this.employeeCount = value.total;
         this.pageCount = value.last_page;
-      }
-      else {
+      } else {
         this.filterValue = '';
         this.Employee = [];
         this.employeeCount = 0;
