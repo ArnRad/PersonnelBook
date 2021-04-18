@@ -178,6 +178,7 @@ $desktopSmall-width: 1024px;
       .employee-info {
         .employee-avatar {
           img {
+            object-fit: cover;
             height: 250px;
             width: 262px;
             border-radius: 50%;

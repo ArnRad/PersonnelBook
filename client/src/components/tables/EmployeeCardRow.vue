@@ -92,6 +92,7 @@ $desktopSmall-width: 1024px;
     align-items: center;
 
     .employee-avatar img {
+      object-fit: cover;
       box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
       border-radius: 7px;
       @include mobile {

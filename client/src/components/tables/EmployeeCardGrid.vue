@@ -2,12 +2,14 @@
   <div class="container-employee">
     <div class="employee-card" @click="$emit('view', employee._id)">
       <div class="employee-data">
-        <div class="employee-avatar">
-          <img v-if="employee.avatar" :src="require(`../../../../server/uploads/images/${employee.avatar}`)" />
-          <img
-            v-else
-            src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?f=y"
-          />
+        <div class="employee-avatar-container">
+          <div class="employee-avatar">
+            <img v-if="employee.avatar" :src="require(`../../../../server/uploads/images/${employee.avatar}`)" />
+            <img
+              v-else
+              src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?f=y"
+            />
+          </div>
         </div>
         <div class="name-container">
           <div class="employee-name">
@@ -69,13 +71,14 @@ export default {
       text-align: center;
       color: #ffffff;
 
-      .employee-avatar {
+      .employee-avatar-container {
         height: 160px;
         display: flex;
         align-items: center;
         justify-content: center;
 
         img {
+          object-fit: cover;
           width: 128px;
           height: 128px;
           border-radius: 50%;
