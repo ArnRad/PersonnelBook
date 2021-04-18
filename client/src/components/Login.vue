@@ -57,6 +57,12 @@ export default {
         localStorage.setItem("user_name", this.username);
         this.$router.push({ name: "Employee" });
         window.location.reload();
+      }).catch(error => {
+        if (error.response.data.error) {
+          this.$alert(error.response.data.error);
+        } else {
+          this.$alert(error.response.data);
+        }
       });
     }
   }
@@ -154,7 +160,7 @@ body {
       input[type="button"],
       button {
         background: #f4f4f4;
-        border: 1px solid #00264c;
+        border: 1px solid #969696;
         padding: 7px 15px;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         border-radius: 5px;
@@ -162,7 +168,7 @@ body {
         text-transform: uppercase;
         letter-spacing: 0.016em;
         font-family: "Open-Sans", sans-serif;
-        color: #00264c;
+        color: black;
         cursor: pointer;
       }
 
@@ -175,7 +181,8 @@ body {
       input[type="submit"]:hover,
       input[type="button"]:hover,
       button:hover {
-        background-color: #00264c;
+        background: rgb(186,44,39);
+        background: linear-gradient(90deg, rgba(186,44,39,1) 0%, rgba(97,14,128,1) 100%);
         color: #f4f4f4;
       }
     }

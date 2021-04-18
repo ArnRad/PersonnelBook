@@ -79,12 +79,21 @@
         <img src="../assets/logout.png" @click="resetStorage" />
       </div>
     </div>
+    <div class="user-info" v-else>
+      <div class="actions">
+        <router-link
+          :to="{
+            name: 'Login'
+          }"
+        >
+          <img src="../assets/logout.png" />
+        </router-link>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import Dropdown from "./Dropdown";
-import axios from "axios";
 import VueJwtDecode from "vue-jwt-decode";
 import { Slide } from "vue-burger-menu";
 
@@ -98,7 +107,6 @@ export default {
   },
 
   components: {
-    Dropdown,
     Slide
   },
 

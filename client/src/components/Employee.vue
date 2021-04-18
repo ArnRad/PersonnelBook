@@ -289,7 +289,8 @@ $desktopMid-width: 1750px;
     justify-content: center;
     list-style: none;
 
-    margin: 30px 0;
+    padding-top: 30px;
+    padding-bottom: 60px;
 
     li {
       color: #00264c;
