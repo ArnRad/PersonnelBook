@@ -48,6 +48,7 @@
 <script>
 import axios from "axios";
 import AddEditWorkplaces from "./actions/AddEditWorkplaces";
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "WorkPlaces",
@@ -84,40 +85,55 @@ export default {
         });
     },
     deleteGroup(id) {
-      let allowDelete = true;
+      if (localStorage.getItem("access_token")) {
+        let tokenInfo = VueJwtDecode.decode(localStorage.getItem("access_token"));
+        if (!tokenInfo.user.permissions.includes('delete workplaces')) {
+          this.$router.push({ name: "404" });
+        } else {
+          let allowDelete = true;
 
-      axios.defaults.headers.common["Authorization"] =
-        "Bearer " + localStorage.getItem("access_token");
+          axios.defaults.headers.common["Authorization"] =
+            "Bearer " + localStorage.getItem("access_token");
 
-      for (let i = 0; i < this.Divisions.length; i++) {
-        if (this.Divisions[i].workplace_id[0] === id) {allowDelete = false}
-      }
-
-      if(allowDelete) {
-        axios
-        .delete("http://" + this.globalURL + "/api/workplaces/" + id, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token")
-          },
-          data: {
-            username: localStorage.getItem("user_name")
+          for (let i = 0; i < this.Divisions.length; i++) {
+            if (this.Divisions[i].workplace_id[0] === id) {allowDelete = false}
           }
-        })
-        .then(response => {
-          this.$alert('Darbovietė pašalinta!');
-          this.getData()
-        });
-      } else {
-        this.$alert('Pirma ištrinkite visus padalinius priklausančius šiai darbovietei!');
+
+          if(allowDelete) {
+            axios
+            .delete("http://" + this.globalURL + "/api/workplaces/" + id, {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("access_token")
+              },
+              data: {
+                username: localStorage.getItem("user_name")
+              }
+            })
+            .then(response => {
+              this.$alert('Darbovietė pašalinta!');
+              this.getData()
+            });
+          } else {
+            this.$alert('Pirma ištrinkite visus padalinius priklausančius šiai darbovietei!');
+          }
+        }
       }
     },
 
     toggleViewForm(value) {
-      this.displayView = !this.displayView;
-      if (value) {
-        this.id = value;
-      } else {
-        this.id = null;
+      if (localStorage.getItem("access_token")) {
+        let tokenInfo = VueJwtDecode.decode(localStorage.getItem("access_token"));
+        if (!tokenInfo.user.permissions.includes('create-edit workplaces')) {
+          this.$router.push({ name: "404" });
+        }
+        else {
+          this.displayView = !this.displayView;
+          if (value) {
+            this.id = value;
+          } else {
+            this.id = null;
+          }
+        }
       }
     }
   }

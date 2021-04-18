@@ -51,6 +51,7 @@
 <script>
 import axios from "axios";
 import AddEditSubGroup from "../actions/AddEditSubGroup";
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "Group",
@@ -85,27 +86,42 @@ export default {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + localStorage.getItem("access_token");
 
-      axios
-        .delete("http://" + this.globalURL + "/api/subgroups/" + id, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token")
-          },
-          data: {
-            username: localStorage.getItem("user_name")
-          }
-        })
-        .then(response => {
-          this.$alert('Pogrupis ištrintas!');
-          this.getGroups();
-        });
+      if (localStorage.getItem("access_token")) {
+        let tokenInfo = VueJwtDecode.decode(localStorage.getItem("access_token"));
+        if (!tokenInfo.user.permissions.includes('delete structures')) {
+          this.$router.push({ name: "404" });
+        } else {
+          axios
+            .delete("http://" + this.globalURL + "/api/subgroups/" + id, {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("access_token")
+              },
+              data: {
+                username: localStorage.getItem("user_name")
+              }
+            })
+            .then(response => {
+              this.$alert('Pogrupis ištrintas!');
+              this.getGroups();
+            });
+        }
+      }
     },
 
     toggleViewForm(value) {
-      this.displayView = !this.displayView;
-      if (value) {
-        this.id = value;
-      } else {
-        this.id = null;
+      if (localStorage.getItem("access_token")) {
+        let tokenInfo = VueJwtDecode.decode(localStorage.getItem("access_token"));
+        if (!tokenInfo.user.permissions.includes('create-edit structures')) {
+          this.$router.push({ name: "404" });
+        }
+        else {
+          this.displayView = !this.displayView;
+          if (value) {
+            this.id = value;
+          } else {
+            this.id = null;
+          }
+        }
       }
     }
   }

@@ -65,7 +65,7 @@
 import Worker from "./tables/Worker";
 import axios from "axios";
 import Paginate from "vuejs-paginate";
-import AddEditEmployee from "./actions/AddEditEmployee";
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "Workers",
@@ -119,19 +119,26 @@ export default {
         .get("http://" + this.globalURL + "/api/workplaces")
         .then(response => (this.workplacesAll = response.data.data));
 
-      axios
-        .delete("http://" + this.globalURL + "/api/employees/" + id, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("access_token")
-          },
-          data: {
-            username: localStorage.getItem("user_name")
-          }
-        })
-        .then(response => {
-          this.$alert('Darbuotojas pašalintas!');
-          this.getData()
-        });
+      if (localStorage.getItem("access_token")) {
+        let tokenInfo = VueJwtDecode.decode(localStorage.getItem("access_token"));
+        if (!tokenInfo.user.permissions.includes('delete employees')) {
+          this.$router.push({ name: "404" });
+        } else {
+          axios
+          .delete("http://" + this.globalURL + "/api/employees/" + id, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("access_token")
+            },
+            data: {
+              username: localStorage.getItem("user_name")
+            }
+          })
+          .then(response => {
+            this.$alert('Darbuotojas pašalintas!');
+            this.getData()
+          });
+        }
+      }
     },
 
     search() {

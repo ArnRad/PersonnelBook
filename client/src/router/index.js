@@ -114,7 +114,9 @@ router.beforeEach((to, from, next) => {
     let tokenInfo = VueJwtDecode.decode(localStorage.getItem("access_token"));
     if (to.meta.permission) {
       if (!tokenInfo.user.permissions.includes(to.meta.permission)) {
-        next("*");
+        next({
+          name: "404"
+        });
       }
     }
   }

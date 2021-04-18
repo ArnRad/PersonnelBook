@@ -50,6 +50,7 @@
 <script>
 import axios from "axios";
 import AddEditGroup from "../actions/AddEditGroup";
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "Group",
@@ -86,40 +87,55 @@ export default {
     },
 
     deleteGroup(id) {
-      let allowDelete = true;
+      if (localStorage.getItem("access_token")) {
+        let tokenInfo = VueJwtDecode.decode(localStorage.getItem("access_token"));
+        if (!tokenInfo.user.permissions.includes('delete structures')) {
+          this.$router.push({ name: "404" });
+        } else {
+          let allowDelete = true;
       
-      axios.defaults.headers.common["Authorization"] =
-        "Bearer " + localStorage.getItem("access_token");
+          axios.defaults.headers.common["Authorization"] =
+            "Bearer " + localStorage.getItem("access_token");
 
-      for (let i = 0; i < this.subGroups.length; i++) {
-        if (this.subGroups[i].group_id[0] === id) {allowDelete = false}
-      }
+          for (let i = 0; i < this.subGroups.length; i++) {
+            if (this.subGroups[i].group_id[0] === id) {allowDelete = false}
+          }
 
-    if(allowDelete) {
-      axios
-        .delete("http://" + this.globalURL + "/api/groups/" + id, {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("access_token")
-            },
-            data: {
-              username: localStorage.getItem("user_name")
+          if(allowDelete) {
+            axios
+              .delete("http://" + this.globalURL + "/api/groups/" + id, {
+                  headers: {
+                    Authorization: "Bearer " + localStorage.getItem("access_token")
+                  },
+                  data: {
+                    username: localStorage.getItem("user_name")
+                  }
+                })
+                .then(response => {
+                  this.$alert('Grupė ištrinta');
+                  this.getGroups();
+                });
+            } else {
+                this.$alert('Pirma ištrinkite visus pogrupius priklausančius šiai grupei!');
             }
-          })
-          .then(response => {
-            this.$alert('Grupė ištrinta');
-            this.getGroups();
-          });
-      } else {
-          this.$alert('Pirma ištrinkite visus pogrupius priklausančius šiai grupei!');
+          }
       }
     },
 
     toggleViewForm(value) {
-      this.displayView = !this.displayView;
-      if (value) {
-        this.id = value;
-      } else {
-        this.id = null;
+      if (localStorage.getItem("access_token")) {
+        let tokenInfo = VueJwtDecode.decode(localStorage.getItem("access_token"));
+        if (!tokenInfo.user.permissions.includes('create-edit structures')) {
+          this.$router.push({ name: "404" });
+        }
+        else {
+          this.displayView = !this.displayView;
+          if (value) {
+            this.id = value;
+          } else {
+            this.id = null;
+          }
+        }
       }
     }
   }

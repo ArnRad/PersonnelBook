@@ -59,6 +59,7 @@
 <script>
 import axios from "axios";
 import AddEditSubDivision from "../actions/AddEditSubDivision";
+import VueJwtDecode from "vue-jwt-decode";
 
 export default {
   name: "SubDivision",
@@ -99,40 +100,55 @@ export default {
     },
 
     deleteSubDivision(id) {
-      let allowDelete = true;
+      if (localStorage.getItem("access_token")) {
+        let tokenInfo = VueJwtDecode.decode(localStorage.getItem("access_token"));
+        if (!tokenInfo.user.permissions.includes('delete structures')) {
+          this.$router.push({ name: "404" });
+        } else {
+          let allowDelete = true;
 
-      axios.defaults.headers.common["Authorization"] =
-        "Bearer " + localStorage.getItem("access_token");
+          axios.defaults.headers.common["Authorization"] =
+            "Bearer " + localStorage.getItem("access_token");
 
-      for (let i = 0; i < this.Regions.length; i++) {
-        if (this.Regions[i].subdivision_id[0] === id) {allowDelete = false}
-      }
+          for (let i = 0; i < this.Regions.length; i++) {
+            if (this.Regions[i].subdivision_id[0] === id) {allowDelete = false}
+          }
 
-      if(allowDelete) {
-        axios
-          .delete("http://" + this.globalURL + "/api/subdivisions/" + id, {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("access_token")
-            },
-            data: {
-              username: localStorage.getItem("user_name")
-            }
-          })
-          .then(response => {
-            this.$alert('Skyrius ištrintas!');
-            this.getSubdivisions();
-          });
-      } else {
-        this.$alert('Pirma ištrinkite visus regionus priklausančius šiam skyriui!');
+          if(allowDelete) {
+            axios
+              .delete("http://" + this.globalURL + "/api/subdivisions/" + id, {
+                headers: {
+                  Authorization: "Bearer " + localStorage.getItem("access_token")
+                },
+                data: {
+                  username: localStorage.getItem("user_name")
+                }
+              })
+              .then(response => {
+                this.$alert('Skyrius ištrintas!');
+                this.getSubdivisions();
+              });
+          } else {
+            this.$alert('Pirma ištrinkite visus regionus priklausančius šiam skyriui!');
+          }
+        }
       }
     },
 
     toggleViewForm(value) {
-      this.displayView = !this.displayView;
-      if (value) {
-        this.id = value;
-      } else {
-        this.id = null;
+      if (localStorage.getItem("access_token")) {
+        let tokenInfo = VueJwtDecode.decode(localStorage.getItem("access_token"));
+        if (!tokenInfo.user.permissions.includes('create-edit structures')) {
+          this.$router.push({ name: "404" });
+        }
+        else {
+          this.displayView = !this.displayView;
+          if (value) {
+            this.id = value;
+          } else {
+            this.id = null;
+          }
+        }
       }
     }
   }
