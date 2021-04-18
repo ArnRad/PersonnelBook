@@ -179,7 +179,7 @@ export default {
 
   data() {
     return {
-      header: "Pridėti naują vartotoją",
+      header: "Pridėti naują administracijos paskyrą",
       user: {},
       selectedPermissions: []
     };

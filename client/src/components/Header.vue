@@ -24,7 +24,7 @@
         >
         <router-link to="/adminusers"
           ><div v-if="haveAccess('admin')" class="nav-item">
-            Administratoriai
+            Administracija
           </div></router-link
         >
       </div>
@@ -48,7 +48,7 @@
           >
           <router-link to="/adminusers"
             ><div v-if="haveAccess('admin')" class="nav-item">
-              Administratoriai
+              Administracija
             </div></router-link
           >
 

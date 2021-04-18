@@ -8,11 +8,11 @@
         @update="getUsers()"
       />
       <div class="users">
-        <div class="users-header">Administratorių paskyros</div>
+        <div class="users-header">Administracijos paskyros</div>
         <div class="actions">
           <div class="buttons">
             <button @click="toggleViewForm()" class="button-add">
-              <img src="../assets/addWorkerIcon.png" />Pridėti vartotoją
+              <img src="../assets/addWorkerIcon.png" />Pridėti paskyrą
             </button>
           </div>
         </div>
