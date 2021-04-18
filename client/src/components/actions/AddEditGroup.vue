@@ -261,7 +261,7 @@ export default {
         input[type="button"],
         button {
           background: #f4f4f4;
-          border: 1px solid #0054a6;
+          border: 1px solid #969696;
           padding: 7px 15px;
           margin: 0 10px;
           box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -270,7 +270,7 @@ export default {
           text-transform: uppercase;
           letter-spacing: 0.016em;
           font-family: "Open-Sans", sans-serif;
-          color: #00264c;
+          color: black;
           cursor: pointer;
         }
 
@@ -283,7 +283,8 @@ export default {
         input[type="submit"]:hover,
         input[type="button"]:hover,
         button:hover {
-          background-color: #0054a6;
+          background: rgb(186,44,39);
+          background: linear-gradient(90deg, rgba(186,44,39,1) 0%, rgba(97,14,128,1) 100%);
           color: #f4f4f4;
         }
       }
