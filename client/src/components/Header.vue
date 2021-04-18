@@ -2,8 +2,7 @@
   <div class="header">
     <div class="container">
       <a class="header-logo" href="/">
-        <!-- <img alt="logo" src="../assets/logo.png"/> -->
-        <p>LOGO</p>
+        <img alt="logo" src="../assets/logo.png"/>
       </a>
     </div>
     <div v-if="checkUser()" class="user-info">
