@@ -7,7 +7,7 @@
     />
     <div class="employee-view">
       <div class="filters-container">
-        <Filters @filter-check="filterOn" @layout-check="layoutOn" />
+        <Filters @filter-check="filterOn" @layout-check="layoutOn" :header="true"/>
         <div
           class="layout"
           v-bind:class="[isActiveLayout ? 'activeLayout' : 'inactiveLayout']"

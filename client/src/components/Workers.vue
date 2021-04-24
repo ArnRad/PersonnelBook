@@ -9,6 +9,11 @@
               <img src="../assets/addWorkerIcon.png" />Pridėti darbuotoją
             </button>
           </router-link>
+          <router-link :to="{ name: 'export' }">
+            <button class="button export">
+              <img src="../assets/exportWorkerIcon.png" />Eksportuoti darbuotojus
+            </button>
+          </router-link>
         </div>
         <div class="search-bar">
           <li>

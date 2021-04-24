@@ -11,6 +11,7 @@ import AdminUsers from "@/components/AdminUsers";
 import AddEditEmployee from "@/components/actions/AddEditEmployee";
 import PageNotFound from "@/components/PageNotFound";
 import UserInfo from "@/components/UserInfo";
+import ExportWorkers from "@/components/ExportWorkers"
 import VueJwtDecode from "vue-jwt-decode";
 
 Vue.use(Router);
@@ -42,6 +43,12 @@ const router = new Router({
       name: "Workers",
       component: Workers,
       meta: { requiresAuth: true, permission: "read employees" }
+    },
+    {
+      path: "/employees/export",
+      name: "export",
+      component: ExportWorkers,
+      meta: { requiresAuth: true }
     },
     {
       path: "/employees/add",

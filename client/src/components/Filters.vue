@@ -88,7 +88,7 @@
             </template>
           </select>
         </li>
-        <li>
+        <li v-if="header">
           <label for="filter-count">Filtruoti po</label>
           <select
             name="filter-count"
@@ -102,7 +102,7 @@
           </select>
         </li>
 
-        <li>
+        <li v-if="header">
           <label for="search">Paieška</label>
           <div class="search-input-field">
             <input
@@ -212,7 +212,7 @@
                     </template>
                   </select>
                 </li>
-                <li>
+                <li v-if="header">
                   <label for="filter-count">Filtruoti po</label>
                   <select
                     name="filter-count"
@@ -226,7 +226,7 @@
                   </select>
                 </li>
 
-                <li>
+                <li v-if="header">
                   <label for="search">Paieška</label>
                   <div class="search-input-field">
                     <input
@@ -256,6 +256,10 @@ Vue.component("slide-up-down", SlideUpDown);
 
 export default {
   name: "Filters",
+
+  props: {
+    header: Boolean
+  },
 
   data() {
     return {
