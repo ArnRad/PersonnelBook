@@ -28,13 +28,13 @@
           <tbody v-for="subdivision in SubDivisions" :key="subdivision.id">
             <tr>
               <td>{{ subdivision.name }}</td>
-              <td>{{ subdivision.division.name}}</td>
+              <td>{{ subdivision.division_id.name}}</td>
               <td>
                 {{
-                subdivision.workplace.street
-                + ' ' + subdivision.workplace.number
-                + ', ' + subdivision.workplace.city
-                + ', ' + subdivision.workplace.country
+                subdivision.workplace_id.street
+                + ' ' + subdivision.workplace_id.number
+                + ', ' + subdivision.workplace_id.city
+                + ', ' + subdivision.workplace_id.country
                 }}
               </td>
               <td>
@@ -111,7 +111,7 @@ export default {
             "Bearer " + localStorage.getItem("access_token");
 
           for (let i = 0; i < this.Regions.length; i++) {
-            if (this.Regions[i].subdivision_id === id) {allowDelete = false}
+            if (this.Regions[i].subdivision_id._id === id) {allowDelete = false}
           }
 
           if(allowDelete) {

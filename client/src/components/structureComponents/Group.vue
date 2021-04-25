@@ -27,7 +27,7 @@
           <tbody v-for="group in Groups" :key="group._id">
             <tr>
               <td>{{ group.name }}</td>
-              <td>{{ group.region.name }}</td>
+              <td>{{ group.region_id.name }}</td>
               <td>
                 <img
                   @click="toggleViewForm(group._id)"
@@ -98,7 +98,7 @@ export default {
             "Bearer " + localStorage.getItem("access_token");
 
           for (let i = 0; i < this.subGroups.length; i++) {
-            if (this.subGroups[i].group_id === id) {allowDelete = false}
+            if (this.subGroups[i].group_id._id === id) {allowDelete = false}
           }
 
           if(allowDelete) {

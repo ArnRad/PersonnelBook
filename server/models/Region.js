@@ -7,13 +7,7 @@ const regionSchema = new mongoose.Schema({
         min: 6,
         max: 255
     },
-    subdivision_id: {
-        type: String,
-        required: true
-    },
-    subdivision: {
-        type: Object
-    }
+    subdivision_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Subdivision' }
 },
 {
     timestamps: true

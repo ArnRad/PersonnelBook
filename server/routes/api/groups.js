@@ -7,13 +7,8 @@ const router = express.Router();
 // GET Group
 router.get('/', async (req, res) => {
     try {
-        let group = await Group.find();
-        for (let i = 0; i < group.length; i++) {
-            if(group[i].region_id) {
-                let region = await Region.findById(group[i].region_id)
-                group[i]['region'] = region
-            }
-        }
+        let group = await Group.find()
+        .populate('region_id')
         res.status(200).json({group});
     } catch (err) {
         res.status(500).json({message: err})

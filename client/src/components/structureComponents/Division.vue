@@ -24,14 +24,14 @@
               <th></th>
             </tr>
           </thead>
-          <tbody v-for="division in Divisions" :key="division.id">
+          <tbody v-for="division in Divisions" :key="division._id">
             <tr>
               <td>{{ division.name }}</td>
               <td>
-                {{ division.workplaces.street }}
-                {{ division.workplaces.number }},
-                {{ division.workplaces.city }},
-                {{ division.workplaces.country }}
+                {{ division.workplace_id.street }}
+                {{ division.workplace_id.number }},
+                {{ division.workplace_id.city }},
+                {{ division.workplace_id.country }}
               </td>
               <td>
                 <img
@@ -109,7 +109,7 @@ export default {
             "Bearer " + localStorage.getItem("access_token");
 
           for (let i = 0; i < this.SubDivisions.length; i++) {
-            if (this.SubDivisions[i].division_id === id) {allowDelete = false}
+            if (this.SubDivisions[i].division_id._id === id) {allowDelete = false}
           }
           
           if(allowDelete) {

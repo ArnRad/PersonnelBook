@@ -7,13 +7,8 @@ const router = express.Router();
 // GET Subgroups
 router.get('/', async (req, res) => {
     try {
-        let subgroup = await Subgroup.find();
-        for (let i = 0; i < subgroup.length; i++) {
-            if(subgroup[i].group_id) {
-                let group = await Group.findById(subgroup[i].group_id)
-                subgroup[i]['group'] = group
-            }
-        }
+        let subgroup = await Subgroup.find()
+        .populate('group_id')
         res.status(200).json({subgroup});
     } catch (err) {
         res.status(500).json({message: err})

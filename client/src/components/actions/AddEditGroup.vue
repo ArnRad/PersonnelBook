@@ -32,7 +32,7 @@
                   />
                   <label for="group">
                       {{ regionOne.name + ' ( '
-                      + regionOne.subdivision.name + ' )'}}
+                      + regionOne.subdivision_id.name + ' )'}}
                   </label>
                 </div>
               </li>

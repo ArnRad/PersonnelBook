@@ -9,17 +9,9 @@ const router = express.Router();
 // GET Subdivision
 router.get('/', async (req, res) => {
     try {
-        let subdivision = await Subdivision.find();
-        for (let i = 0; i < subdivision.length; i++) {
-            if(subdivision[i].division_id) {
-                let division = await Division.findById(subdivision[i].division_id)
-                subdivision[i]['division'] = division
-                if (division.workplace_id) {
-                    let workplace = await Workplace.findById(division.workplace_id)
-                    subdivision[i]['workplace'] = workplace
-                }
-            }
-        }
+        let subdivision = await Subdivision.find()
+        .populate('division_id')
+        .populate('workplace_id')
         res.status(200).json({subdivision});
     } catch (err) {
         res.status(500).json({message: err})
@@ -33,7 +25,8 @@ router.post('/', async (req, res) => {
         for (let i = 0; i < req.body.division_id.length; i++) {
             const new_subdivision = new Subdivision({
                 name: req.body.name,
-                division_id: req.body.division_id[i]
+                division_id: req.body.division_id[i],
+                workplace_id: req.body.workplace_id[i]
             });
             const savedSubdivision = await new_subdivision.save();
         }

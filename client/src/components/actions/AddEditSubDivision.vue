@@ -29,17 +29,18 @@
                     type="checkbox"
                     name="division"
                     v-model="selectedDivision"
-                    :value="divisionOne._id"
+                    :value="divisionOne._id + ' ' + divisionOne.workplace_id._id"
                   />
                   <label for="division">
                       {{ divisionOne.name + ' ( '
-                      + divisionOne.workplaces.street + ' '
-                      + divisionOne.workplaces.number + ', '
-                      + divisionOne.workplaces.city + ', '
-                      + divisionOne.workplaces.country + ' )' }}
+                      + divisionOne.workplace_id.street + ' '
+                      + divisionOne.workplace_id.number + ', '
+                      + divisionOne.workplace_id.city + ', '
+                      + divisionOne.workplace_id.country + ' )' }}
                   </label>
                 </div>
               </li>
+              {{selectedDivision}}
 
               <li class="buttons">
                 <input
@@ -103,10 +104,18 @@ export default {
   methods: {
     submitForm() {
       if (!this.id) {
+        let divisionIDS = []
+        let workplaceIDS = []
+        this.selectedDivision.forEach(e => {
+          let ids = e.split(' ')
+          divisionIDS.push(ids[0])
+          workplaceIDS.push(ids[1])
+        })
 	      axios
           .post("http://" + this.globalURL + "/api/subdivisions", {
             name: this.subdivision.name,
-            division_id: this.selectedDivision
+            division_id: divisionIDS,
+            workplace_id: workplaceIDS
           })
           .then(response => {
             this.$alert('Skyrius sėkmingai pridėtas!');

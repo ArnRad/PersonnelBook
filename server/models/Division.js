@@ -7,13 +7,7 @@ const divisionSchema = new mongoose.Schema({
         min: 6,
         max: 255
     },
-    workplace_id: {
-        type: String,
-        required: true
-    },
-    workplaces: {
-        type: Object
-    }
+    workplace_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Workplace' },
 },
 {
     timestamps: true

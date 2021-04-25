@@ -7,13 +7,7 @@ const groupSchema = new mongoose.Schema({
         min: 6,
         max: 255
     },
-    region_id: {
-        type: String,
-        required: true
-    },
-    region: {
-        type: Object,
-    }
+    region_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Region' }
 },
 {
     timestamps: true

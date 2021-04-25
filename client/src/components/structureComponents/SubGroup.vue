@@ -27,7 +27,7 @@
           <tbody v-for="subgroup in subGroups" :key="subgroup.id">
             <tr>
               <td>{{ subgroup.name }}</td>
-              <td v-if="subgroup.group">{{ subgroup.group.name }}</td>
+              <td v-if="subgroup.group_id">{{ subgroup.group_id.name }}</td>
               <td v-else>-</td>
               <td>
                 <img

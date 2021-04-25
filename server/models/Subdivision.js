@@ -7,16 +7,8 @@ const subdivisionSchema = new mongoose.Schema({
         min: 6,
         max: 255
     },
-    division_id: {
-        type: String,
-        required: true
-    },
-    division: {
-        type: Object
-    },
-    workplace: {
-        type: Object
-    }
+    division_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Division' },
+    workplace_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Workplace' }
 },
 {
     timestamps: true

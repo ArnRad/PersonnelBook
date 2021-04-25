@@ -27,7 +27,7 @@
           <tbody v-for="region in Regions" :key="region._id">
             <tr>
               <td>{{ region.name }}</td>
-              <td>{{ region.subdivision.name }}</td>
+              <td>{{ region.subdivision_id.name }}</td>
               <td>
                 <img
                   @click="toggleViewForm(region._id)"
@@ -98,7 +98,7 @@ export default {
             "Bearer " + localStorage.getItem("access_token");
 
           for (let i = 0; i < this.Groups.length; i++) {
-            if (this.Groups[i].region_id === id) {allowDelete = false}
+            if (this.Groups[i].region_id._id === id) {allowDelete = false}
           }
 
           if(allowDelete) {

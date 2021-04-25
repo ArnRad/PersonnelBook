@@ -7,13 +7,7 @@ const subgroupSchema = new mongoose.Schema({
         min: 6,
         max: 255
     },
-    group_id: {
-        type: String,
-        required: true
-    },
-    group: {
-        type: Object,
-    }
+    group_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Group' }
 },
 {
     timestamps: true

@@ -31,7 +31,7 @@
                   />
                   <label for="region">
                       {{ subdivisionOne.name + ' ( '
-                      + subdivisionOne.division.name + ' )'}}
+                      + subdivisionOne.division_id.name + ' )'}}
                   </label>
                 </div>
               </li>

@@ -7,13 +7,8 @@ const router = express.Router();
 // GET Regions
 router.get('/', async (req, res) => {
     try {
-        let region = await Region.find();
-        for (let i = 0; i < region.length; i++) {
-            if(region[i].subdivision_id) {
-                let subdivision = await Subdivision.findById(region[i].subdivision_id)
-                region[i]['subdivision'] = subdivision
-            }
-        }
+        let region = await Region.find()
+        .populate('subdivision_id')
         res.status(200).json({region});
     } catch (err) {
         res.status(500).json({message: err})

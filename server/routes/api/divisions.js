@@ -8,13 +8,8 @@ const router = express.Router();
 // GET Division
 router.get('/', async (req, res) => {
     try {
-        let divisions = await Division.find();
-        for (let i = 0; i < divisions.length; i++) {
-            if(divisions[i].workplace_id) {
-                let workplace = await Workplace.findById(divisions[i].workplace_id)
-                divisions[i]['workplaces'] = workplace
-            }
-        }
+        let divisions = await Division.find()
+        .populate('workplace_id')
         res.status(200).json({divisions})
     } catch (err) {
         res.status(500).json({message: err})
