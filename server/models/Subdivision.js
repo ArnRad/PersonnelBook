@@ -8,10 +8,13 @@ const subdivisionSchema = new mongoose.Schema({
         max: 255
     },
     division_id: {
-        type: Array,
+        type: String,
         required: true
     },
     division: {
+        type: Object
+    },
+    workplace: {
         type: Object
     }
 },

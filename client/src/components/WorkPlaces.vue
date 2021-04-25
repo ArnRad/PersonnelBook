@@ -96,7 +96,7 @@ export default {
             "Bearer " + localStorage.getItem("access_token");
 
           for (let i = 0; i < this.Divisions.length; i++) {
-            if (this.Divisions[i].workplace_id[0] === id) {allowDelete = false}
+            if (this.Divisions[i].workplace_id === id) {allowDelete = false}
           }
 
           if(allowDelete) {

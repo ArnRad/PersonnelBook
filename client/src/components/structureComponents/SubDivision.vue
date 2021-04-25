@@ -31,10 +31,10 @@
               <td>{{ subdivision.division.name}}</td>
               <td>
                 {{
-                subdivision.division.workplaces.street
-                + ' ' + subdivision.division.workplaces.number
-                + ', ' + subdivision.division.workplaces.city
-                + ', ' + subdivision.division.workplaces.country
+                subdivision.workplace.street
+                + ' ' + subdivision.workplace.number
+                + ', ' + subdivision.workplace.city
+                + ', ' + subdivision.workplace.country
                 }}
               </td>
               <td>
@@ -111,7 +111,7 @@ export default {
             "Bearer " + localStorage.getItem("access_token");
 
           for (let i = 0; i < this.Regions.length; i++) {
-            if (this.Regions[i].subdivision_id[0] === id) {allowDelete = false}
+            if (this.Regions[i].subdivision_id === id) {allowDelete = false}
           }
 
           if(allowDelete) {

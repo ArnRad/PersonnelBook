@@ -98,7 +98,7 @@ export default {
             "Bearer " + localStorage.getItem("access_token");
 
           for (let i = 0; i < this.Groups.length; i++) {
-            if (this.Groups[i].region_id[0] === id) {allowDelete = false}
+            if (this.Groups[i].region_id === id) {allowDelete = false}
           }
 
           if(allowDelete) {

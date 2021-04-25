@@ -8,7 +8,7 @@ const divisionSchema = new mongoose.Schema({
         max: 255
     },
     workplace_id: {
-        type: Array,
+        type: String,
         required: true
     },
     workplaces: {

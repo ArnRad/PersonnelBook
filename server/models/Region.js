@@ -8,7 +8,7 @@ const regionSchema = new mongoose.Schema({
         max: 255
     },
     subdivision_id: {
-        type: Array,
+        type: String,
         required: true
     },
     subdivision: {

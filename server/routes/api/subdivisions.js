@@ -1,13 +1,25 @@
 const express = require('express');
 const Subdivision = require('../../models/Subdivision');
+const Division = require('../../models/Division');
 const crypto = require("crypto");
+const Workplace = require('../../models/Workplace');
 
 const router = express.Router();
 
 // GET Subdivision
 router.get('/', async (req, res) => {
     try {
-        const subdivision = await Subdivision.find();
+        let subdivision = await Subdivision.find();
+        for (let i = 0; i < subdivision.length; i++) {
+            if(subdivision[i].division_id) {
+                let division = await Division.findById(subdivision[i].division_id)
+                subdivision[i]['division'] = division
+                if (division.workplace_id) {
+                    let workplace = await Workplace.findById(division.workplace_id)
+                    subdivision[i]['workplace'] = workplace
+                }
+            }
+        }
         res.status(200).json({subdivision});
     } catch (err) {
         res.status(500).json({message: err})
@@ -18,11 +30,10 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        for (let i = 0; i < req.body.division.length; i++) {
+        for (let i = 0; i < req.body.division_id.length; i++) {
             const new_subdivision = new Subdivision({
                 name: req.body.name,
-                division_id: req.body.division[i]._id,
-                division: req.body.division[i]
+                division_id: req.body.division_id[i]
             });
             const savedSubdivision = await new_subdivision.save();
         }

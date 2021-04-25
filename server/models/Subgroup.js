@@ -8,12 +8,11 @@ const subgroupSchema = new mongoose.Schema({
         max: 255
     },
     group_id: {
-        type: Array,
+        type: String,
         required: true
     },
     group: {
         type: Object,
-        required: true
     }
 },
 {

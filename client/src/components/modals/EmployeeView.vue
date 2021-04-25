@@ -27,39 +27,39 @@
           <div class="workplace-header-container">
             <div class="workplace-header">Darbovietė</div>
           </div>
-          <div v-if="worker.workplace" class="contact address">
+          <div v-if="worker.workplace_id" class="contact address">
             <p>Adresas</p>
             <p>
-              {{ worker.workplace.street }}, {{ worker.workplace.number }},
-              {{ worker.workplace.city }}, {{ worker.workplace.country }}
+              {{ worker.workplace_id.street }}, {{ worker.workplace_id.number }},
+              {{ worker.workplace_id.city }}, {{ worker.workplace_id.country }}
             </p>
           </div>
-          <div v-if="worker.division" class="contact division">
+          <div v-if="worker.division_id" class="contact division">
             <p>Padalinys</p>
-            <p>{{ worker.division.name }}</p>
+            <p>{{ worker.division_id.name }}</p>
           </div>
-          <div v-if="worker.subdivision" class="contact subdivision">
+          <div v-if="worker.subdivision_id" class="contact subdivision">
             <p>Skyrius</p>
             <p>
-              {{ worker.subdivision.name }}
+              {{ worker.subdivision_id.name }}
             </p>
           </div>
-          <div v-if="worker.region" class="contact region">
+          <div v-if="worker.region_id" class="contact region">
             <p>Regionas</p>
             <p>
-              {{ worker.region.name }}
+              {{ worker.region_id.name }}
             </p>
           </div>
-          <div v-if="worker.group" class="contact group">
+          <div v-if="worker.group_id" class="contact group">
             <p>Grupė</p>
             <p>
-              {{ worker.group.name }}
+              {{ worker.group_id.name }}
             </p>
           </div>
-          <div v-if="worker.subgroup" class="contact subgroup">
+          <div v-if="worker.subgroup_id" class="contact subgroup">
             <p>Pogrūpis</p>
             <p>
-              {{ worker.subgroup.name }}
+              {{ worker.subgroup_id.name }}
             </p>
           </div>
         </div>

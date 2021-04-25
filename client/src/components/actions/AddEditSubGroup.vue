@@ -28,7 +28,7 @@
                     type="checkbox"
                     name="group"
                     v-model="selectedGroup"
-                    :value="groupOne"
+                    :value="groupOne._id"
                   />
                   <label for="group">
                       {{ groupOne.name + ' ( '
@@ -102,7 +102,7 @@ export default {
 	      axios
           .post("http://" + this.globalURL + "/api/subgroups", {
             name: this.subgroup.name,
-            group: this.selectedGroup
+            group_id: this.selectedGroup
           })
           .then(response => {
             this.$alert('Pogrupis pridėtas!');

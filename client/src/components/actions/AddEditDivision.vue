@@ -93,7 +93,6 @@ export default {
         .get("http://" + this.globalURL + "/api/divisions/" + this.id)
         .then(response => {
           this.division = response.data;
-          this.selectedWorkplace.push(response.data.workplaces._id)
         });
     }
   },

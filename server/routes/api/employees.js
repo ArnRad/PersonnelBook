@@ -1,5 +1,11 @@
 const express = require('express');
 const Employee = require('../../models/Employee');
+const Workplace = require('../../models/Workplace');
+const Subdivision = require('../../models/Subdivision');
+const Division = require('../../models/Division');
+const Region = require('../../models/Region');
+const Group = require('../../models/Group');
+const Subgroup = require('../../models/Subgroup');
 const multer = require('multer')
 
 const storage = multer.diskStorage({
@@ -38,7 +44,13 @@ const router = express.Router();
 // GET Employees
 router.get('/', async (req, res) => {
     try {
-        let resultEmployees = await Employee.find();
+        let resultEmployees = await Employee.find()
+        .populate('workplace_id')
+        .populate('subdivision_id')
+        .populate('division_id')
+        .populate('region_id')
+        .populate('group_id')
+        .populate('subgroup_id')
         let { page = 1, limit = 8 } = req.query;
         let employeesArray = [], divisionsArray = [], subdivisionsArray = []
         let regionsArray = [], groupsArray = [], subgroupsArray = []
@@ -58,123 +70,92 @@ router.get('/', async (req, res) => {
             if (division && workplace && subdivision && region && group && subgroup) {
                 employeesArray = []
                 resultEmployees.forEach(emp => {
-                    if (emp.workplace._id === workplace && emp.division._id === division
-                        && emp.subdivision._id === subdivision && emp.region._id === region
-                        && emp.group._id === group && emp.subgroup._id === subgroup) 
+                    if (emp.workplace_id._id == workplace && emp.division_id._id == division
+                        && emp.subdivision_id._id == subdivision && emp.region_id._id == region
+                        && emp.group_id._id == group && emp.subgroup_id._id == subgroup) 
                     {
-                        employeesArray.push(emp);
-                    }
-                    if (emp.division.workplace_id[0] === workplace) {
-                        divisionsArray.push(emp.division)
-                    }
-                    if (emp.subdivision.division_id[0] === division) {
-                        subdivisionsArray.push(emp.subdivision)
-                    }
-                    if (emp.region.subdivision_id[0] === subdivision) {
-                        regionsArray.push(emp.region)
-                    }
-                    if (emp.group.region_id[0] === region) {
-                        groupsArray.push(emp.group)
-                    }
-                    if (emp.subgroup.group_id[0] === group) {
-                        subgroupsArray.push(emp.subgroup)
+                        employeesArray.push(emp)
+                        divisionsArray.push(emp.division_id)
+                        subdivisionsArray.push(emp.subdivision_id)
+                        regionsArray.push(emp.region_id)
+                        groupsArray.push(emp.group_id)
+                        subgroupsArray.push(emp.subgroup_id)
                     }
                 })
             } else if (division && workplace && subdivision && region && group) {
                 employeesArray = []
                 resultEmployees.forEach(emp => {
-                    if (emp.workplace._id === workplace && emp.division._id === division
-                        && emp.subdivision._id === subdivision && emp.region._id === region
-                        && emp.group._id === group) 
+                    if (emp.workplace_id._id == workplace && emp.division_id._id == division
+                        && emp.subdivision_id._id == subdivision && emp.region_id._id == region
+                        && emp.group_id._id == group) 
                     {
-                        employeesArray.push(emp);
-                    }
-                    if (emp.division.workplace_id[0] === workplace) {
-                        divisionsArray.push(emp.division)
-                    }
-                    if (emp.subdivision.division_id[0] === division) {
-                        subdivisionsArray.push(emp.subdivision)
-                    }
-                    if (emp.region.subdivision_id[0] === subdivision) {
-                        regionsArray.push(emp.region)
-                    }
-                    if (emp.group.region_id[0] === region) {
-                        groupsArray.push(emp.group)
-                    }
-                    if (emp.subgroup.group_id[0] === group) {
-                        subgroupsArray.push(emp.subgroup)
+                        employeesArray.push(emp)
+                        divisionsArray.push(emp.division_id)
+                        subdivisionsArray.push(emp.subdivision_id)
+                        regionsArray.push(emp.region_id)
+                        groupsArray.push(emp.group_id)
+                        subgroupsArray.push(emp.subgroup_id)
                     }
                 })
             } else if (division && workplace && subdivision && region) {
                 employeesArray = []
                 resultEmployees.forEach(emp => {
-                    if (emp.workplace._id === workplace && emp.division._id === division
-                        && emp.subdivision._id === subdivision && emp.region._id === region) 
+                    if (emp.workplace_id._id == workplace && emp.division_id._id == division
+                        && emp.subdivision_id._id == subdivision && emp.region_id._id == region) 
                     {
-                        employeesArray.push(emp);
-                    }
-                    if (emp.division.workplace_id[0] === workplace) {
-                        divisionsArray.push(emp.division)
-                    }
-                    if (emp.subdivision.division_id[0] === division) {
-                        subdivisionsArray.push(emp.subdivision)
-                    }
-                    if (emp.region.subdivision_id[0] === subdivision) {
-                        regionsArray.push(emp.region)
-                    }
-                    if (emp.group.region_id[0] === region) {
-                        groupsArray.push(emp.group)
+                        employeesArray.push(emp)
+                        divisionsArray.push(emp.division_id)
+                        subdivisionsArray.push(emp.subdivision_id)
+                        regionsArray.push(emp.region_id)
+                        groupsArray.push(emp.group_id)
                     }
                 })
             } else if (division && workplace && subdivision) {
                 employeesArray = []
                 resultEmployees.forEach(emp => {
-                    if (emp.workplace._id === workplace && emp.division._id === division
-                        && emp.subdivision._id === subdivision) 
+                    if (emp.workplace_id._id == workplace && emp.division_id._id == division
+                        && emp.subdivision_id._id == subdivision) 
                     {
-                        employeesArray.push(emp);
-                    }
-                    if (emp.division.workplace_id[0] === workplace) {
-                        divisionsArray.push(emp.division)
-                    }
-                    if (emp.subdivision.division_id[0] === division) {
-                        subdivisionsArray.push(emp.subdivision)
-                    }
-                    if (emp.region.subdivision_id[0] === subdivision) {
-                        regionsArray.push(emp.region)
+                        employeesArray.push(emp)
+                        divisionsArray.push(emp.division_id)
+                        subdivisionsArray.push(emp.subdivision_id)
+                        regionsArray.push(emp.region_id)
                     }
                 })
             } else if (division && workplace) {
                 employeesArray = []
                 resultEmployees.forEach(emp => {
-                    if (emp.workplace._id === workplace && emp.division._id === division) {
-                        employeesArray.push(emp);
-                    }
-                    if (emp.division.workplace_id[0] === workplace) {
-                        divisionsArray.push(emp.division)
-                    }
-                    if (emp.subdivision.division_id[0] === division) {
-                        subdivisionsArray.push(emp.subdivision)
+                    if (emp.workplace_id._id == workplace && emp.division_id._id == division) {
+                        employeesArray.push(emp)
+                        divisionsArray.push(emp.division_id)
+                        subdivisionsArray.push(emp.subdivision_id)
                     }
                 })
             } else {
                 resultEmployees.forEach(emp => {
-                    if (emp.workplace._id === workplace) {
+                    if (emp.workplace_id._id == workplace) {
                         employeesArray.push(emp);
-                    }
-                    if (emp.division.workplace_id[0] === workplace) {
-                        divisionsArray.push(emp.division)
+                        divisionsArray.push(emp.division_id)
                     }
                 })
             }
             if (employeesArray.length > 0) {
                 resultEmployees = employeesArray
+            } else {
+                resultEmployees = []
             }
         }
         if(req.query.search) {
             const searchTxt = req.query.search;
-            Employee.find({ name: { $regex: searchTxt, $options: "i" } }, function(err, docs) {
-                resultEmployees = docs
+            Employee.find({ name: { $regex: searchTxt, $options: "i" } })
+            .populate('workplace_id')
+            .populate('subdivision_id')
+            .populate('division_id')
+            .populate('region_id')
+            .populate('group_id')
+            .populate('subgroup_id')
+            .exec(function (err, resultEmployees) {
+                if (err) return handleError(err);
                 const total = resultEmployees.length;
                 const employeesAll = resultEmployees;
                 const pages = Math.ceil(total / limit);
@@ -183,7 +164,19 @@ router.get('/', async (req, res) => {
                 const employees = resultEmployees.slice(startIndex, endIndex);
                 const search = 1;
                 res.status(200).json({ total: total , last_page: pages, per_page: limit, employees, employeesAll, search});
-            });
+            })
+                
+            // Employee.find({ name: { $regex: searchTxt, $options: "i" } }, function(err, docs) {
+            //     resultEmployees = docs
+            //     const total = resultEmployees.length;
+            //     const employeesAll = resultEmployees;
+            //     const pages = Math.ceil(total / limit);
+            //     const startIndex = (page - 1) * limit;
+            //     const endIndex = page * limit;
+            //     const employees = resultEmployees.slice(startIndex, endIndex);
+            //     const search = 1;
+            //     res.status(200).json({ total: total , last_page: pages, per_page: limit, employees, employeesAll, search});
+            // });
         }
         else {
             const total = resultEmployees.length;
@@ -221,12 +214,12 @@ router.post('/', upload.single('file') , async (req, res) => {
         avatar: req.file.filename,
         gender: req.body.gender,
         position: req.body.position,
-        workplace: JSON.parse(req.body.workplace),
-        subdivision: JSON.parse(req.body.subdivision),
-        division: JSON.parse(req.body.division),
-        region: JSON.parse(req.body.region),
-        group: JSON.parse(req.body.group),
-        subgroup: JSON.parse(req.body.subgroup)
+        workplace_id: req.body.workplace_id,
+        subdivision_id: req.body.subdivision_id,
+        division_id: req.body.division_id,
+        region_id: req.body.region_id,
+        group_id: req.body.group_id,
+        subgroup_id: req.body.subgroup_id
     });
     try {
         const savedEmployee = await new_employee.save();
@@ -264,6 +257,12 @@ router.delete('/:employeeId', async (req, res) => {
 
 router.patch('/:employeeId', upload.single('file'), async (req, res) => {
     try {
+        let file = ''
+        if (req.file) {
+            file = req.file.filename
+        } else {
+            file = req.body.fileName
+        }
         const updateEmployee = await Employee.updateOne(
             {_id: req.params.employeeId}, 
             {$set: {
@@ -272,15 +271,15 @@ router.patch('/:employeeId', upload.single('file'), async (req, res) => {
                 mobile_number: req.body.mobile_number,
                 work_number: req.body.work_number,
                 email: req.body.email,
-                avatar: req.file.filename,
                 gender: req.body.gender,
                 position: req.body.position,
-                workplace: JSON.parse(req.body.workplace),
-                subdivision: JSON.parse(req.body.subdivision),
-                division: JSON.parse(req.body.division),
-                region: JSON.parse(req.body.region),
-                group: JSON.parse(req.body.group),
-                subgroup: JSON.parse(req.body.subgroup)
+                workplace_id: req.body.workplace_id,
+                subdivision_id: req.body.subdivision_id,
+                division_id: req.body.division_id,
+                region_id: req.body.region_id,
+                group_id: req.body.group_id,
+                subgroup_id: req.body.subgroup_id,
+                avatar: file
             }}
         );
         res.status(200).json(updateEmployee).send("Vartotojas atnaujintas");
@@ -291,18 +290,20 @@ router.patch('/:employeeId', upload.single('file'), async (req, res) => {
 
 router.use(function(err, req, res, next) {
     if(err.code === "LIMIT_FILE_TYPES") {
-        console.log(err)
         res.status(422).json({error: "Galimi nuotraukos formatai - .jpg .jpeg .png"})
         return
     }
     
     if(err.code === "LIMIT_FILE_SIZE") {
-        console.log(err)
         res.status(422).json({error: `Failas per didelis. Didžiausias failo dydis ${MAX_SIZE/1000}Kb`})
         return
     }
 })
 
 // Functions
+
+async function getWorkplace(id){
+    return await Workplace.findById(id);
+}
 
 module.exports = router;

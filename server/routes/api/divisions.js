@@ -8,8 +8,14 @@ const router = express.Router();
 // GET Division
 router.get('/', async (req, res) => {
     try {
-        const divisions = await Division.find();
-        res.status(200).json({divisions});
+        let divisions = await Division.find();
+        for (let i = 0; i < divisions.length; i++) {
+            if(divisions[i].workplace_id) {
+                let workplace = await Workplace.findById(divisions[i].workplace_id)
+                divisions[i]['workplaces'] = workplace
+            }
+        }
+        res.status(200).json({divisions})
     } catch (err) {
         res.status(500).json({message: err})
     }
@@ -20,11 +26,9 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         for (let i = 0; i < req.body.workplace_id.length; i++) {
-            const workplace = await Workplace.findById(req.body.workplace_id[i]);
             const new_division = new Division({
                 name: req.body.name,
-                workplace_id: workplace._id,
-                workplaces: workplace
+                workplace_id: req.body.workplace_id[i]
             });
             const savedDivision = await new_division.save();
         }

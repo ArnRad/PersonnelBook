@@ -42,7 +42,7 @@
           </div>
           <div class="contact address">
             <p>Adresas:</p>
-            <p>Kaunas</p>
+            {{employee.workplace_id.street}} {{employee.workplace_id.number}}, {{employee.workplace_id.city}}
           </div>
         </div>
       </div>

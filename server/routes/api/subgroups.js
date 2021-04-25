@@ -1,4 +1,5 @@
 const express = require('express');
+const Group = require('../../models/Group');
 const Subgroup = require('../../models/Subgroup');
 
 const router = express.Router();
@@ -6,7 +7,13 @@ const router = express.Router();
 // GET Subgroups
 router.get('/', async (req, res) => {
     try {
-        const subgroup = await Subgroup.find();
+        let subgroup = await Subgroup.find();
+        for (let i = 0; i < subgroup.length; i++) {
+            if(subgroup[i].group_id) {
+                let group = await Group.findById(subgroup[i].group_id)
+                subgroup[i]['group'] = group
+            }
+        }
         res.status(200).json({subgroup});
     } catch (err) {
         res.status(500).json({message: err})
@@ -17,11 +24,10 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        for (let i = 0; i < req.body.group.length; i++) {
+        for (let i = 0; i < req.body.group_id.length; i++) {
             const new_subgroup = new Subgroup({
                 name: req.body.name,
-                group_id: req.body.group[i]._id,
-                group: req.body.group[i]
+                group_id: req.body.group_id[i],
             });
             const savedSubgroup = await new_subgroup.save();
         }

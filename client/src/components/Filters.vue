@@ -79,7 +79,11 @@
         </li>
         <li>
           <label for="subgroup">Pogrūpis</label>
-          <select name="subgroup" v-model="selectedSubGroup">
+          <select 
+            name="subgroup" 
+            v-model="selectedSubGroup"
+            @change="loadSubGroupsLast()"
+          >
             <option value="" selected disabled hidden>Visi</option>
             <template v-for="subgroupOne in subgroupsAll">
               <option :key="subgroupOne._id" :value="subgroupOne._id">
@@ -293,9 +297,6 @@ export default {
   },
 
   methods: {
-    distinct (value, index, self) {
-      return self.indexOf(value) === index;
-    },
     toggleFilters() {
       this.active = !this.active;
       this.$emit("layout-check", this.active);
@@ -396,6 +397,31 @@ export default {
         .then(
           response => (
             this.subgroupsAll = response.data.subgroups ? [...new Map(response.data.subgroups.map(item => [item['_id'], item])).values()] : [],
+            this.$emit("filter-check", response.data)
+          )
+        );
+    },
+
+    loadSubGroupsLast () {
+      axios
+        .get(
+          "http://" +
+            this.globalURL +
+            "/api/employees?workplace=" +
+            this.selectedWorkplace +
+            "&division=" +
+            this.selectedDivision +
+            "&subdivision=" +
+            this.selectedSubDivision +
+            "&region=" +
+            this.selectedRegion +
+            "&group=" +
+            this.selectedGroup +
+            "&subgroup=" +
+            this.selectedSubGroup
+        )
+        .then(
+          response => (
             this.$emit("filter-check", response.data)
           )
         );

@@ -9,16 +9,16 @@
     </td>
     <td>{{ worker.name }}</td>
     <td>{{ worker.lastname }}</td>
-    <td v-if="!worker.division">-</td>
-    <td v-else>{{ worker.division.name }}</td>
-    <td v-if="!worker.subdivision">-</td>
-    <td v-else>{{ worker.subdivision.name }}</td>
-    <td v-if="!worker.region">-</td>
-    <td v-else>{{ worker.region.name }}</td>
-    <td v-if="!worker.group">-</td>
-    <td v-else>{{ worker.group.name }}</td>
-    <td v-if="!worker.subgroup">-</td>
-    <td v-else>{{ worker.subgroup.name }}</td>
+    <td v-if="!worker.division_id">-</td>
+    <td v-else>{{ worker.division_id.name }}</td>
+    <td v-if="!worker.subdivision_id">-</td>
+    <td v-else>{{ worker.subdivision_id.name }}</td>
+    <td v-if="!worker.region_id">-</td>
+    <td v-else>{{ worker.region_id.name }}</td>
+    <td v-if="!worker.group_id">-</td>
+    <td v-else>{{ worker.group_id.name }}</td>
+    <td v-if="!worker.subgroup_id">-</td>
+    <td v-else>{{ worker.subgroup_id.name }}</td>
     <td class="actions-container">
       <router-link
         :to="{

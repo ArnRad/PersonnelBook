@@ -27,7 +27,7 @@
                     type="checkbox"
                     name="region"
                     v-model="selectedSubDivision"
-                    :value="subdivisionOne"
+                    :value="subdivisionOne._id"
                   />
                   <label for="region">
                       {{ subdivisionOne.name + ' ( '
@@ -103,7 +103,7 @@ export default {
 	      axios
           .post("http://" + this.globalURL + "/api/regions", {
             name: this.region.name,
-            subdivision: this.selectedSubDivision
+            subdivision_id: this.selectedSubDivision
           })
           .then(response => {
             this.$alert('Regionas sėkmingai pridėtas!');

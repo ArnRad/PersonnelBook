@@ -8,12 +8,11 @@ const groupSchema = new mongoose.Schema({
         max: 255
     },
     region_id: {
-        type: Array,
+        type: String,
         required: true
     },
     region: {
         type: Object,
-        required: true
     }
 },
 {

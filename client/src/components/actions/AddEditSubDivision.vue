@@ -29,7 +29,7 @@
                     type="checkbox"
                     name="division"
                     v-model="selectedDivision"
-                    :value="divisionOne"
+                    :value="divisionOne._id"
                   />
                   <label for="division">
                       {{ divisionOne.name + ' ( '
@@ -106,7 +106,7 @@ export default {
 	      axios
           .post("http://" + this.globalURL + "/api/subdivisions", {
             name: this.subdivision.name,
-            division: this.selectedDivision
+            division_id: this.selectedDivision
           })
           .then(response => {
             this.$alert('Skyrius sėkmingai pridėtas!');

@@ -1,12 +1,19 @@
 const express = require('express');
 const Region = require('../../models/Region');
+const Subdivision = require('../../models/Subdivision')
 
 const router = express.Router();
 
-// GET Region
+// GET Regions
 router.get('/', async (req, res) => {
     try {
-        const region = await Region.find();
+        let region = await Region.find();
+        for (let i = 0; i < region.length; i++) {
+            if(region[i].subdivision_id) {
+                let subdivision = await Subdivision.findById(region[i].subdivision_id)
+                region[i]['subdivision'] = subdivision
+            }
+        }
         res.status(200).json({region});
     } catch (err) {
         res.status(500).json({message: err})
@@ -17,11 +24,10 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        for (let i = 0; i < req.body.subdivision.length; i++) {
+        for (let i = 0; i < req.body.subdivision_id.length; i++) {
             const new_region = new Region({
                 name: req.body.name,
-                subdivision_id: req.body.subdivision[i]._id,
-                subdivision: req.body.subdivision[i]
+                subdivision_id: req.body.subdivision_id[i]
             });
             const savedRegion = await new_region.save();
         }
@@ -55,7 +61,7 @@ router.delete('/:regionId', async (req, res) => {
     }
 });
 
-// Update Subdivision
+// Update Region
 
 router.patch('/:regionId', async (req, res) => {
     try {

@@ -1,12 +1,19 @@
 const express = require('express');
 const Group = require('../../models/Group');
+const Region = require('../../models/Region');
 
 const router = express.Router();
 
 // GET Group
 router.get('/', async (req, res) => {
     try {
-        const group = await Group.find();
+        let group = await Group.find();
+        for (let i = 0; i < group.length; i++) {
+            if(group[i].region_id) {
+                let region = await Region.findById(group[i].region_id)
+                group[i]['region'] = region
+            }
+        }
         res.status(200).json({group});
     } catch (err) {
         res.status(500).json({message: err})
@@ -17,11 +24,10 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        for (let i = 0; i < req.body.region.length; i++) {
+        for (let i = 0; i < req.body.region_id.length; i++) {
             const new_group = new Group({
                 name: req.body.name,
-                region_id: req.body.region[i]._id,
-                region: req.body.region[i]
+                region_id: req.body.region_id[i],
             });
             const savedGroup = await new_group.save();
         }

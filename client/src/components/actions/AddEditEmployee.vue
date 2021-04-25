@@ -38,9 +38,9 @@
             <select name="subdivision" v-model="selectedSubDivision" required>
               <template v-for="subdivisionOne in subdivisionsAll">
                 <option
-                  v-if="subdivisionOne.division_id[0] == selectedDivision._id"
+                  v-if="subdivisionOne.division_id == selectedDivision"
                   :key="subdivisionOne._id"
-                  :value="subdivisionOne"
+                  :value="subdivisionOne._id"
                 >
                   {{ subdivisionOne.name }}
                 </option>
@@ -53,8 +53,8 @@
               <template v-for="subgroupOne in subgroupsAll">
                 <option
                   :key="subgroupOne._id"
-                  v-if="subgroupOne.group_id == selectedGroup._id"
-                  :value="subgroupOne"
+                  v-if="subgroupOne.group_id == selectedGroup"
+                  :value="subgroupOne._id"
                 >
                   {{ subgroupOne.name }}
                 </option>
@@ -91,7 +91,7 @@
               <option
                 v-for="workplaceOne in workplacesAll"
                 :key="workplaceOne._id"
-                :value="workplaceOne"
+                :value="workplaceOne._id"
               >
                 {{ workplaceOne.street }}
               </option>
@@ -103,8 +103,8 @@
               <template v-for="regionOne in regionsAll">
                 <option
                   :key="regionOne._id"
-                  v-if="regionOne.subdivision_id == selectedSubDivision._id"
-                  :value="regionOne"
+                  v-if="regionOne.subdivision_id == selectedSubDivision"
+                  :value="regionOne._id"
                 >
                   {{ regionOne.name }}
                 </option>
@@ -135,8 +135,8 @@
               <template v-for="divisionOne in divisionsAll">
                 <option
                   :key="divisionOne._id"
-                  :value="divisionOne"
-                  v-if="divisionOne.workplace_id[0] == selectedWorkplace._id"
+                  :value="divisionOne._id"
+                  v-if="divisionOne.workplace_id == selectedWorkplace"
                 >
                   {{ divisionOne.name }}
                 </option>
@@ -149,8 +149,8 @@
               <template v-for="groupOne in groupsAll">
                 <option
                   :key="groupOne._id"
-                  v-if="groupOne.region_id == selectedRegion._id"
-                  :value="groupOne"
+                  v-if="groupOne.region_id == selectedRegion"
+                  :value="groupOne._id"
                 >
                   {{ groupOne.name }}
                 </option>
@@ -199,7 +199,6 @@ export default {
     return {
       file: "",
       fileName: "",
-      testDivisionsAll: [],
       workplacesAll: {},
       divisionsAll: {},
       subdivisionsAll: {},
@@ -274,12 +273,12 @@ export default {
             this.employee.mobile_number = response.data.mobile_number,
             this.employee.work_number = response.data.work_number,
             this.fileName = response.data.avatar,
-            this.selectedWorkplace = response.data.workplace,
-            this.selectedDivision = response.data.division,
-            this.selectedSubDivision = response.data.subdivision,
-            this.selectedRegion = response.data.region,
-            this.selectedGroup = response.data.group,
-            this.selectedSubGroup = response.data.subgroup
+            this.selectedWorkplace = response.data.workplace_id,
+            this.selectedDivision = response.data.division_id,
+            this.selectedSubDivision = response.data.subdivision_id,
+            this.selectedRegion = response.data.region_id,
+            this.selectedGroup = response.data.group_id,
+            this.selectedSubGroup = response.data.subgroup_id
           )
         );
     }
@@ -288,7 +287,11 @@ export default {
   methods: {
     submitForm() {
       const formData = new FormData();
-      formData.append('file', this.file)
+      if (this.file) {
+        formData.append('file', this.file)
+      } else {
+        formData.append('fileName', this.fileName)
+      }
       formData.append('name', this.employee.name)
       formData.append('lastname', this.employee.lastname)
       formData.append('mobile_number', this.employee.mobile_number)
@@ -296,30 +299,32 @@ export default {
       formData.append('email', this.employee.email)
       formData.append('gender', this.employee.gender)
       formData.append('position', this.employee.position)
-      formData.append('workplace', JSON.stringify(this.selectedWorkplace))
-      formData.append('division', JSON.stringify(this.selectedDivision))
-      formData.append('subdivision', JSON.stringify(this.selectedSubDivision))
-      formData.append('region', JSON.stringify(this.selectedRegion))
-      formData.append('group', JSON.stringify(this.selectedGroup))
-      formData.append('subgroup', JSON.stringify(this.selectedSubGroup))
+      formData.append('workplace_id', this.selectedWorkplace)
+      formData.append('division_id', this.selectedDivision)
+      formData.append('subdivision_id', this.selectedSubDivision)
+      formData.append('region_id', this.selectedRegion)
+      formData.append('group_id', this.selectedGroup)
+      formData.append('subgroup_id', this.selectedSubGroup)
       if (!this.$route.params.id) {
 	      axios
           .post("http://" + this.globalURL + "/api/employees", formData)
           .then(response => {
             this.$alert('Darbuotojas sėkmingai pridėtas!');
+            this.$router.push({ name: "Workers" });
           })
           .catch(error => {
             this.$alert(error.response.data.error);
-          });
+          })
       } else {
 	      axios
           .patch("http://" + this.globalURL + "/api/employees/" + this.$route.params.id, formData)
           .then(response => {
             this.$alert('Darbuotojas sėkmingai atnaujintas!');
+            this.$router.push({ name: "Workers" });
           })
           .catch(error => {
             this.$alert(error.response.data.error);
-          });
+          })
       }
     },
 

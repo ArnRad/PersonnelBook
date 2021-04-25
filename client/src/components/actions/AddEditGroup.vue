@@ -28,7 +28,7 @@
                     type="checkbox"
                     name="group"
                     v-model="selectedRegion"
-                    :value="regionOne"
+                    :value="regionOne._id"
                   />
                   <label for="group">
                       {{ regionOne.name + ' ( '
@@ -101,7 +101,7 @@ export default {
 	      axios
           .post("http://" + this.globalURL + "/api/groups", {
             name: this.group.name,
-            region: this.selectedRegion
+            region_id: this.selectedRegion
           })
           .then(response => {
             this.$alert('Grupė sėkmingai pridėta!');

@@ -23,8 +23,7 @@ const EmployeeSchema = mongoose.Schema(
             required: false
         },
         avatar: {
-            type: String,
-            required: false
+            type: String
         },
         gender: {
             type: String,
@@ -34,33 +33,12 @@ const EmployeeSchema = mongoose.Schema(
             type: String,
             required: true
         },
-        workplace: {
-            type: Object,
-            required: true
-        },
-        subdivision: {
-            type: Object,
-            required: true
-        },
-        division: {
-            type: Object,
-            required: true
-        },
-        region: {
-            type: Object,
-            required: false
-        },
-        group: {
-            type: Object,
-            required: true
-        },
-        subgroup: {
-            type: Object,
-            required: true
-        },
-        avatar: {
-            type: String
-        }
+        workplace_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Workplace' },
+        subdivision_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Subdivision' },
+        division_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Division' },
+        region_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Region' },
+        group_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Group' },
+        subgroup_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Subgroup' }
     },
     {
         timestamps: true 
