@@ -38,7 +38,7 @@
             <select name="subdivision" v-model="selectedSubDivision" required>
               <template v-for="subdivisionOne in subdivisionsAll">
                 <option
-                  v-if="subdivisionOne.division_id == selectedDivision"
+                  v-if="subdivisionOne.division_id._id == selectedDivision"
                   :key="subdivisionOne._id"
                   :value="subdivisionOne._id"
                 >
@@ -53,7 +53,7 @@
               <template v-for="subgroupOne in subgroupsAll">
                 <option
                   :key="subgroupOne._id"
-                  v-if="subgroupOne.group_id == selectedGroup"
+                  v-if="subgroupOne.group_id._id == selectedGroup"
                   :value="subgroupOne._id"
                 >
                   {{ subgroupOne.name }}
@@ -103,7 +103,7 @@
               <template v-for="regionOne in regionsAll">
                 <option
                   :key="regionOne._id"
-                  v-if="regionOne.subdivision_id == selectedSubDivision"
+                  v-if="regionOne.subdivision_id._id == selectedSubDivision"
                   :value="regionOne._id"
                 >
                   {{ regionOne.name }}
@@ -136,7 +136,7 @@
                 <option
                   :key="divisionOne._id"
                   :value="divisionOne._id"
-                  v-if="divisionOne.workplace_id == selectedWorkplace"
+                  v-if="divisionOne.workplace_id._id == selectedWorkplace"
                 >
                   {{ divisionOne.name }}
                 </option>
@@ -149,7 +149,7 @@
               <template v-for="groupOne in groupsAll">
                 <option
                   :key="groupOne._id"
-                  v-if="groupOne.region_id == selectedRegion"
+                  v-if="groupOne.region_id._id == selectedRegion"
                   :value="groupOne._id"
                 >
                   {{ groupOne.name }}

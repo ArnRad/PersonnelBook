@@ -165,18 +165,6 @@ router.get('/', async (req, res) => {
                 const search = 1;
                 res.status(200).json({ total: total , last_page: pages, per_page: limit, employees, employeesAll, search});
             })
-                
-            // Employee.find({ name: { $regex: searchTxt, $options: "i" } }, function(err, docs) {
-            //     resultEmployees = docs
-            //     const total = resultEmployees.length;
-            //     const employeesAll = resultEmployees;
-            //     const pages = Math.ceil(total / limit);
-            //     const startIndex = (page - 1) * limit;
-            //     const endIndex = page * limit;
-            //     const employees = resultEmployees.slice(startIndex, endIndex);
-            //     const search = 1;
-            //     res.status(200).json({ total: total , last_page: pages, per_page: limit, employees, employeesAll, search});
-            // });
         }
         else {
             const total = resultEmployees.length;

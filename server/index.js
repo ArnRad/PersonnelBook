@@ -46,10 +46,6 @@ app.use('/api/groups', groups);
 const subgroups = require('./routes/api/subgroups');
 app.use('/api/subgroups', subgroups);
 
-// Import Change
-const change = require('./routes/api/change');
-app.use('/api/change', change);
-
 // Connect to DB
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true }, () => {
 });

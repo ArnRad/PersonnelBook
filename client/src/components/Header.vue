@@ -7,6 +7,11 @@
     </div>
     <div v-if="checkUser()" class="user-info">
       <div class="nav">
+        <router-link to="/statistics">
+          <div class="nav-item">
+            Informacija
+          </div>
+        </router-link>
         <router-link to="/employees"
           ><div v-if="haveAccess('read employees')" class="nav-item">
             Darbuotojai
@@ -31,6 +36,11 @@
 
       <div class="burger-menu">
         <Slide>
+          <router-link to="/statistics">
+            <div class="nav-item">
+              Informacija
+            </div>
+          </router-link>
           <router-link to="/employees"
             ><div v-if="haveAccess('read employees')" class="nav-item">
               Darbuotojai
@@ -79,6 +89,13 @@
       </div>
     </div>
     <div class="user-info" v-else>
+      <div class="nav">
+        <router-link to="/statistics">
+          <div class="nav-item">
+            Informacija
+          </div>
+        </router-link>
+      </div>
       <div class="actions">
         <router-link
           :to="{

@@ -3,7 +3,8 @@ import axios from "axios";
 import Router from "vue-router";
 import Employee from "@/components/Employee";
 import Login from "@/components/Login";
-import Register from "@/components/Register"
+import Register from "@/components/Register";
+import Statistics from "@/components/Statistics";
 import Workers from "@/components/Workers";
 import Structure from "@/components/Structure";
 import WorkPlaces from "@/components/WorkPlaces";
@@ -22,6 +23,11 @@ const router = new Router({
       path: "/",
       name: "Employee",
       component: Employee
+    },
+    {
+      path: "/statistics",
+      name: "Statistics",
+      component: Statistics
     },
     {
       path: "*",

@@ -4,7 +4,9 @@ import Vue from "vue";
 import App from "./App";
 import router from "./router";
 import VueSimpleAlert from "vue-simple-alert";
+import VueEllipseProgress from 'vue-ellipse-progress';
 
+Vue.use(VueEllipseProgress);
 Vue.use(VueSimpleAlert);
 
 Vue.config.productionTip = false;

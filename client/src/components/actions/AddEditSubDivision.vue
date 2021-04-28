@@ -40,8 +40,7 @@
                   </label>
                 </div>
               </li>
-              {{selectedDivision}}
-
+              
               <li class="buttons">
                 <input
                   v-show="!this.id"
