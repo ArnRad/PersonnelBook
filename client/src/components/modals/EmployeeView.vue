@@ -85,6 +85,13 @@
               {{ worker.email }}
             </p>
           </div>
+          <div class="contact email-button">
+            <div class="buttons">
+              <button class="login-button">
+                <a :href="`mailto:${worker.email}`">Send Email</a>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -316,6 +323,41 @@ $desktopSmall-width: 1024px;
   @include mobile {
     font-size: 12px;
   }
+}
+
+.email-button {
+  justify-content: center;
+  background: none;
+  margin-top: 30px;
+}
+
+input[type="button"],
+button {
+  background: #f4f4f4;
+  border: 1px solid #969696;
+  padding: 7px 15px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.016em;
+  font-family: "Open-Sans", sans-serif;
+  color: black;
+  cursor: pointer;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+input[type="submit"]:hover,
+input[type="button"]:hover,
+button:hover {
+  background: rgb(186,44,39);
+  background: linear-gradient(90deg, rgba(186,44,39,1) 0%, rgba(97,14,128,1) 100%);
+  color: #f4f4f4;
 }
 
 .contact:last-of-type {

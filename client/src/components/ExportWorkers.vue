@@ -87,12 +87,12 @@ export default {
           "El.paštas": element.email,
           "Lytis": element.gender,
           "Pareigos": element.position,
-          "Darbovietės adresas": `${element.workplace.street} ${element.workplace.number}, ${element.workplace.city}, ${element.workplace.country}`,
-          "Padalinys": element.division.name,
-          "Skyrius": element.subdivision.name,
-          "Regionas": element.region.name,
-          "Grupė": element.group.name,
-          "Pogrupis": element.subgroup.name
+          "Darbovietės adresas": `${element.workplace_id.street} ${element.workplace_id.number}, ${element.workplace_id.city}, ${element.workplace_id.country}`,
+          "Padalinys": element.division_id.name,
+          "Skyrius": element.subdivision_id.name,
+          "Regionas": element.region_id.name,
+          "Grupė": element.group_id.name,
+          "Pogrupis": element.subgroup_id.name
         }
         this.arrayToExport.push(object)
       })
