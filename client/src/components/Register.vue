@@ -73,7 +73,6 @@ export default {
         localStorage.setItem("access_token", response.data);
         localStorage.setItem("user_name", this.username);
         this.$router.push({ name: "Employee" });
-        window.location.reload();
       });
     }
   }

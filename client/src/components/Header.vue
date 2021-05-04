@@ -1,8 +1,10 @@
 <template>
   <div class="header">
     <div class="container">
-      <a class="header-logo" href="/">
-        <img alt="logo" src="../assets/logo.png"/>
+      <a class="header-logo">
+        <router-link to="/">
+          <img alt="logo" src="../assets/logo.png"/>
+        </router-link>
       </a>
     </div>
     <div v-if="checkUser()" class="user-info">

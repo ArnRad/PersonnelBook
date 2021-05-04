@@ -1,6 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const {registerValidation} = require('../../../validation');
+const {registerValidation} = require('../../validation');
 require('dotenv').config();
 const User = require('../../models/User');
 
@@ -21,10 +21,6 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
 
     req.body.password = process.env.DEFAULT_PASSWORD;
-
-    //Validate user
-    const {error} = registerValidation(req.body);
-    if(error) return res.status(400).send(error.details[0].message);
 
     //Check user email
     const emailExist = await User.findOne({email: req.body.email});
