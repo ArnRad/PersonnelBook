@@ -1,16 +1,11 @@
 const express = require('express');
 const Employee = require('../../models/Employee');
 const Workplace = require('../../models/Workplace');
-const Subdivision = require('../../models/Subdivision');
-const Division = require('../../models/Division');
-const Region = require('../../models/Region');
-const Group = require('../../models/Group');
-const Subgroup = require('../../models/Subgroup');
 const multer = require('multer')
 
 const storage = multer.diskStorage({
     destination: function(req, file, callback) {
-        callback(null, './server/uploads/images')
+        callback(null, './uploads/images')
     },
     filename: function(req, file, callback) {
         callback(null, Date.now() + file.originalname)
@@ -192,15 +187,15 @@ router.get('/', async (req, res) => {
 
 // Add Employees
 
-router.post('/', upload.single('file') , async (req, res) => {
+router.post('/', upload.single('file'), async (req, res) => {
     const new_employee = new Employee({
         name: req.body.name,
         lastname: req.body.lastname,
         mobile_number: req.body.mobile_number,
         work_number: req.body.work_number,
         email: req.body.email,
-        avatar: req.file.filename,
         gender: req.body.gender,
+        avatar: req.file.filename,
         position: req.body.position,
         workplace_id: req.body.workplace_id,
         subdivision_id: req.body.subdivision_id,
@@ -211,9 +206,9 @@ router.post('/', upload.single('file') , async (req, res) => {
     });
     try {
         const savedEmployee = await new_employee.save();
-        res.json(savedEmployee);
+        res.status(200).json(savedEmployee);
     } catch (err) {
-        res.json({message: err});
+        res.status(500).json({message: err});
     }
 });
 

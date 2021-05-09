@@ -285,7 +285,7 @@ export default {
   },
 
   methods: {
-    submitForm() {
+    async submitForm() {
       const formData = new FormData();
       if (this.file) {
         formData.append('file', this.file)
@@ -306,8 +306,9 @@ export default {
       formData.append('group_id', this.selectedGroup)
       formData.append('subgroup_id', this.selectedSubGroup)
       if (!this.$route.params.id) {
-	      axios
-          .post("http://" + this.globalURL + "/api/employees", formData)
+        try {
+        await axios
+          .post("http://" + this.globalURL + "/api/employees/", formData)
           .then(response => {
             this.$alert('Darbuotojas sėkmingai pridėtas!');
             this.$router.push({ name: "Workers" });
@@ -315,6 +316,9 @@ export default {
           .catch(error => {
             this.$alert(error.response.data.error);
           })
+        } catch (err) {
+          console.log(err)
+        }
       } else {
 	      axios
           .patch("http://" + this.globalURL + "/api/employees/" + this.$route.params.id, formData)

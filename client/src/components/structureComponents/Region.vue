@@ -30,6 +30,7 @@
               <td>{{ region.subdivision_id.name }}</td>
               <td>
                 <img
+                  class="edit-btn"
                   @click="toggleViewForm(region._id)"
                   src="../../assets/edit-employee.png"
                 />

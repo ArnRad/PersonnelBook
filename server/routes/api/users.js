@@ -41,9 +41,9 @@ router.post('/', async (req, res) => {
     });
     try {
         const savedUser = await new_user.save();
-        res.json({savedUser, message: "Vartotojas pridėtas!"});
+        res.status(200).json({savedUser, message: "Vartotojas pridėtas!"});
     } catch (err) {
-        res.json({message: err});
+        res.status(500).json({message: err});
     }
 });
 

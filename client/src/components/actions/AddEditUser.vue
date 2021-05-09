@@ -58,6 +58,7 @@
                   <input
                     type="checkbox"
                     name="structure-create"
+                    id="structurePerm"
                     v-model="selectedPermissions"
                     :value="'create-edit structures'"
                     @change="editCheck(selectedPermissions, 'structures')"
@@ -90,6 +91,7 @@
                   <input
                     type="checkbox"
                     name="workplace-create"
+                    id="workplacePerm"
                     v-model="selectedPermissions"
                     :value="'create-edit workplaces'"
                     @change="editCheck(selectedPermissions, 'workplaces')"
@@ -121,6 +123,7 @@
                 <div>
                   <input
                     type="checkbox"
+                    id="employeePerm"
                     name="employee-create"
                     v-model="selectedPermissions"
                     :value="'create-edit employees'"
@@ -161,7 +164,7 @@
                 >
                   Redaguoti
                 </button>
-                <button @click="$emit('close')">Atšaukti</button>
+                <button id="closeBtn" @click="$emit('close')">Atšaukti</button>
               </li>
             </ul>
           </div>

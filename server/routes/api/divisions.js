@@ -26,8 +26,8 @@ router.post('/', async (req, res) => {
                 workplace_id: req.body.workplace_id[i]
             });
             const savedDivision = await new_division.save();
+            res.json(savedDivision).status(200).send("Padalinys pridėtas!");
         }
-        res.status(200).send("Padalinys pridėtas!");
     } catch (err) {
         res.json({message: err});
     }

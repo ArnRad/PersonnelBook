@@ -10,15 +10,15 @@
           <ul>
             <li>
               <label for="username">Vartotojo vardas</label>
-              <input type="text" v-model="username" />
+              <input id="usernameInput" type="text" v-model="username" />
             </li>
 
             <li>
               <label for="password">Slaptažodis</label>
-              <input type="password" v-model="password" />
+              <input id="passwordInput" type="password" v-model="password" />
             </li>
             <div class="buttons">
-              <button type="submit" class="login-button">Prisijungti</button>
+              <button id="logButton" type="submit" class="login-button">Prisijungti</button>
             </div>
           </ul>
         </div>

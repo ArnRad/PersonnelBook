@@ -27,6 +27,7 @@
                 </td>
                 <td>
                   <img
+                    class="edit-btn"
                     @click="toggleViewForm(workplace._id)"
                     src="../assets/edit-employee.png"
                   />

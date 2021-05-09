@@ -39,6 +39,7 @@
               </td>
               <td>
                 <img
+                  class="edit-btn"
                   @click="toggleViewForm(subdivision._id)"
                   src="../../assets/edit-employee.png"
                 />

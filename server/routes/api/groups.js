@@ -25,8 +25,8 @@ router.post('/', async (req, res) => {
                 region_id: req.body.region_id[i],
             });
             const savedGroup = await new_group.save();
+            res.json(savedGroup).status(200).send("Grupė pridėtas!");
         }
-        res.status(200).send("Grupė pridėtas!");
     } catch (err) {
         res.json({message: err});
     }

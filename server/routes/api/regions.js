@@ -25,8 +25,8 @@ router.post('/', async (req, res) => {
                 subdivision_id: req.body.subdivision_id[i]
             });
             const savedRegion = await new_region.save();
+            res.json(savedRegion).status(200).send("Regionas pridėtas!");
         }
-        res.status(200).send("Regionas pridėtas!");
     } catch (err) {
         res.json({message: err});
     }

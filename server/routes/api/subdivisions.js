@@ -29,8 +29,8 @@ router.post('/', async (req, res) => {
                 workplace_id: req.body.workplace_id[i]
             });
             const savedSubdivision = await new_subdivision.save();
+            res.json(savedSubdivision).status(200).send("Skyrius pridėtas!");
         }
-        res.status(200).send("Skyrius pridėtas!");
     } catch (err) {
         res.json({message: err});
     }

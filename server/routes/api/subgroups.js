@@ -25,8 +25,8 @@ router.post('/', async (req, res) => {
                 group_id: req.body.group_id[i],
             });
             const savedSubgroup = await new_subgroup.save();
+            res.json(savedSubgroup).status(200).send("Pogrupis pridėtas!");
         }
-        res.status(200).send("Pogrupis pridėtas!");
     } catch (err) {
         res.json({message: err});
     }

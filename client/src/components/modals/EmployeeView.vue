@@ -87,7 +87,7 @@
           </div>
           <div class="contact email-button">
             <div class="buttons">
-              <button class="login-button">
+              <button id="emailButton" class="login-button">
                 <a :href="`mailto:${worker.email}`">Send Email</a>
               </button>
             </div>
@@ -120,7 +120,7 @@ $desktopSmall-width: 1024px;
 
 @mixin mobile {
   @media (max-width: #{$desktopSmall-width - 1px}) {
-    @content;
+    @content
   }
 }
 

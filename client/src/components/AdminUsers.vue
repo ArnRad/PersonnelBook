@@ -11,7 +11,7 @@
         <div class="users-header">Administracijos paskyros</div>
         <div class="actions">
           <div class="buttons">
-            <button @click="toggleViewForm()" class="button-add">
+            <button id="addUser" @click="toggleViewForm()" class="button-add">
               <img src="../assets/addWorkerIcon.png" />Pridėti paskyrą
             </button>
           </div>
@@ -37,6 +37,7 @@
                 <td>{{ user.date }}</td>
                 <td>
                   <img
+                    class="edit-btn"
                     @click="toggleViewForm(user._id)"
                     src="../assets/edit-employee.png"
                   />

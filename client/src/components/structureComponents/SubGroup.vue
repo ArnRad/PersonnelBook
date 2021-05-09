@@ -31,6 +31,7 @@
               <td v-else>-</td>
               <td>
                 <img
+                  class="edit-btn"
                   @click="toggleViewForm(subgroup._id)"
                   src="../../assets/edit-employee.png"
                 />

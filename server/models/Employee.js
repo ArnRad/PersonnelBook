@@ -23,7 +23,8 @@ const EmployeeSchema = mongoose.Schema(
             required: false
         },
         avatar: {
-            type: String
+            type: String,
+            required: false
         },
         gender: {
             type: String,

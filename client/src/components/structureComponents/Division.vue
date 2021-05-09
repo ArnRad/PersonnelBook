@@ -35,6 +35,7 @@
               </td>
               <td>
                 <img
+                  class="edit-btn"
                   @click="toggleViewForm(division._id)"
                   src="../../assets/edit-employee.png"
                 />

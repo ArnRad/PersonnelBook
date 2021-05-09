@@ -5,6 +5,7 @@
         <li>
           <label for="workplace">Adresas</label>
           <select
+            id="workplace_filter"
             name="workplace"
             v-model="selectedWorkplace"
             @change="loadDivisions()"
@@ -20,6 +21,7 @@
         <li>
           <label for="division">Padalinys</label>
           <select
+            id="division_filter"
             name="division"
             v-model="selectedDivision"
             @change="loadSubDivisions()"
@@ -35,6 +37,7 @@
         <li>
           <label for="subdivision">Skyrius</label>
           <select
+            id="subdivision_filter"
             name="subdivision"
             v-model="selectedSubDivision"
             @change="loadRegions()"
@@ -49,7 +52,8 @@
         </li>
         <li>
           <label for="region">Regionas</label>
-          <select 
+          <select
+            id="region_filter"
             name="region" 
             v-model="selectedRegion"
             @change="loadGroups()"
@@ -65,6 +69,7 @@
         <li>
           <label for="group">Grupė</label>
           <select
+            id="group_filter"
             name="group"
             v-model="selectedGroup"
             @change="loadSubGroups()"
@@ -79,7 +84,8 @@
         </li>
         <li>
           <label for="subgroup">Pogrūpis</label>
-          <select 
+          <select
+            id="subgroup_filter"
             name="subgroup" 
             v-model="selectedSubGroup"
             @change="loadSubGroupsLast()"
@@ -95,6 +101,7 @@
         <li v-if="header">
           <label for="filter-count">Filtruoti po</label>
           <select
+            id="count_filter"
             name="filter-count"
             v-model="selectedFilterCount"
             @change="loadCount()"

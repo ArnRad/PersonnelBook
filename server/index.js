@@ -46,10 +46,18 @@ app.use('/api/groups', groups);
 const subgroups = require('./routes/api/subgroups');
 app.use('/api/subgroups', subgroups);
 
-// Connect to DB
+// Connect to original DB
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true }, () => {
 });
 
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
+
+// // Connect to TEST DB
+// mongoose.connect(process.env.TEST_DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true }, () => {
+// });
+
+// const port = process.env.TEST_PORT || 5000;
+
+// app.listen(port, () => console.log(`Test server started on port ${port}`));
