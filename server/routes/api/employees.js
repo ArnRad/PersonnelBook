@@ -141,8 +141,7 @@ router.get('/', async (req, res) => {
             }
         }
         if(req.query.search) {
-            const searchTxt = req.query.search;
-            Employee.find({ name: { $regex: searchTxt, $options: "i" } })
+            Employee.find({ name: { $regex: req.query.search, $options: "i" } })
             .populate('workplace_id')
             .populate('subdivision_id')
             .populate('division_id')

@@ -34,7 +34,7 @@
                 <td>{{ user.surname }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.name }}</td>
-                <td>{{ user.date }}</td>
+                <td>{{ new Date(user.date).toLocaleString("lt-LT") }}</td>
                 <td>
                   <img
                     class="edit-btn"
@@ -67,7 +67,8 @@ export default {
     return {
       Users: {},
       id: 0,
-      displayView: false
+      displayView: false,
+      myDate: ''
     };
   },
 

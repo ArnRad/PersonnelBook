@@ -88,7 +88,7 @@
           <div class="contact email-button">
             <div class="buttons">
               <button id="emailButton" class="login-button">
-                <a :href="`mailto:${worker.email}`">Send Email</a>
+                <a :href="`mailto:${worker.email}`">Siųsti el. laišką</a>
               </button>
             </div>
           </div>
