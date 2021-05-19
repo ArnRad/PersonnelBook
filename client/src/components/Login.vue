@@ -56,7 +56,7 @@ export default {
         localStorage.setItem("access_token", response.data);
         localStorage.setItem("user_name", this.username);
         this.$router.push({ name: "Employee" });
-        window.location.reload();
+        window.location.reload()
       }).catch(error => {
         if (error.response.data.error) {
           this.$alert(error.response.data.error);
